@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>MediVerify - Verify Medicine</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+<body>
+
+    <div class="verification-page">
+
+        <div class="verification-card">
+
+            <h1>MediVerify</h1>
+
+            <p class="verification-subtitle">
+                Medicine Authenticity Verification
+            </p>
+
+
+            <!-- ==========================================
+                 LOADING
+            =========================================== -->
+
+            <div id="loading">
+
+                <p>
+                    Verifying medicine...
+                </p>
+
+            </div>
+
+
+            <!-- ==========================================
+                 RESULT
+            =========================================== -->
+
+            <div
+                id="verificationResult"
+                style="display: none;"
+            >
+
+                <div id="resultStatus"></div>
+
+                <h2 id="medicineName">
+                </h2>
+
+                <div class="verification-details">
+
+                    <p>
+                        <strong>
+                            Serial Number:
+                        </strong>
+
+                        <span id="serialNumber">
+                        </span>
+                    </p>
+
+
+                    <p>
+                        <strong>
+                            Batch Number:
+                        </strong>
+
+                        <span id="batchNumber">
+                        </span>
+                    </p>
+
+
+                    <p>
+                        <strong>
+                            Expiry Date:
+                        </strong>
+
+                        <span id="expiryDate">
+                        </span>
+                    </p>
+
+                </div>
+
+
+                <p
+                    id="verificationMessage"
+                    class="verification-message"
+                >
+                </p>
+
+            </div>
+
+
+            <!-- ==========================================
+                 ERROR
+            =========================================== -->
+
+            <div
+                id="verificationError"
+                style="display: none;"
+            >
+
+                <h2>
+                    Verification Failed
+                </h2>
+
+                <p>
+                    Unable to verify this medicine.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="js/verification.js"></script>
+
+</body>
+
+</html>

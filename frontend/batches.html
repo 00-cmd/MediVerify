@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediVerify - Batches</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <h2>MediVerify</h2>
+
+            <p class="role">Manufacturer</p>
+
+            <nav>
+
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+
+                <a href="medicines.html">
+                    Medicines
+                </a>
+
+                <a href="batches.html" class="active">
+                    Batches
+                </a>
+
+                <a href="#">
+                    QR Codes
+                </a>
+
+                <a href="#">
+                    Verification
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn">
+                Logout
+            </button>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+
+        <main class="main-content">
+
+            <header class="dashboard-header">
+
+                <div>
+
+                    <h1>Batches</h1>
+
+                    <p>
+                        Create and manage medicine batches
+                    </p>
+
+                </div>
+
+            </header>
+
+
+            <!-- CREATE BATCH -->
+
+            <section class="dashboard-section">
+
+                <h2>Create New Batch</h2>
+
+                <form id="batchForm">
+
+                    <label for="medicine_id">
+                        Medicine
+                    </label>
+
+                    <select id="medicine_id" required>
+
+                        <option value="">
+                            Select medicine
+                        </option>
+
+                    </select>
+
+
+                    <label for="batch_number">
+                        Batch Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="batch_number"
+                        placeholder="Example: PCM202609002"
+                        required
+                    >
+
+
+                    <label for="manufacturing_date">
+                        Manufacturing Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="manufacturing_date"
+                        required
+                    >
+
+
+                    <label for="expiry_date">
+                        Expiry Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="expiry_date"
+                        required
+                    >
+
+
+                    <button type="submit">
+                        Create Batch
+                    </button>
+
+                </form>
+
+                <p id="batchMessage"></p>
+
+            </section>
+
+
+            <!-- BATCH LIST -->
+
+            <section class="dashboard-section">
+
+                <h2>Registered Batches</h2>
+
+                <div id="batchList">
+
+                    <p>Loading batches...</p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="js/batches.js"></script>
+
+</body>
+
+</html>

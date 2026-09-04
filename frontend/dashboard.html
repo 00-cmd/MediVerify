@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediVerify - Dashboard</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- Sidebar -->
+
+        <aside class="sidebar">
+
+            <h2>MediVerify</h2>
+
+            <p class="role">
+                Manufacturer
+            </p>
+
+            <nav>
+
+                <a href="#" class="active">
+                    Dashboard
+                </a>
+
+                <a href="medicines.html">
+                    Medicines
+                </a>
+
+                <a href="batches.html">
+                    Batches
+                </a>
+
+                <a href="qr-codes.html">
+                    QR Codes
+                </a>
+
+                <a href="verification.html">
+                    Verification
+                </a>
+
+            </nav>
+
+            <button class="logout-btn">
+                Logout
+            </button>
+
+        </aside>
+
+
+        <!-- Main Content -->
+
+        <main class="main-content">
+
+            <header class="dashboard-header">
+
+                <div>
+                    <h1>Manufacturer Dashboard</h1>
+
+                    <p>
+                        Manage medicines, batches and QR codes
+                    </p>
+                </div>
+
+            </header>
+
+
+            <!-- Statistics -->
+
+            <section class="stats">
+
+    <div class="stat-card">
+        <h3>Total Medicines</h3>
+        <p id="totalMedicines">0</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Total Batches</h3>
+        <p id="totalBatches">0</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Serialized Medicines</h3>
+        <p id="totalSerialized">0</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Active Batches</h3>
+        <p id="activeBatches">0</p>
+    </div>
+
+</section>
+
+
+            <!-- Recent Activity -->
+
+            <section class="dashboard-section">
+
+                <h2>Recent Activity</h2>
+
+                <div class="activity-card">
+
+                    <p>
+                        Batch PCM202609001 created
+                    </p>
+
+                    <span>
+                        Today
+                    </span>
+
+                </div>
+
+
+                <div class="activity-card">
+
+                    <p>
+                        500 medicines serialized
+                    </p>
+
+                    <span>
+                        Yesterday
+                    </span>
+
+                </div>
+
+
+                <div class="activity-card">
+
+                    <p>
+                        QR codes generated for batch PCM202609001
+                    </p>
+
+                    <span>
+                        2 days ago
+                    </span>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+<script src="js/dashboard.js"></script>
+</body>
+
+</html>

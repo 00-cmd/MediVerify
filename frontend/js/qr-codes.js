@@ -1,0 +1,252 @@
+// ============================================================
+// AUTHENTICATION
+// ============================================================
+
+const token = localStorage.getItem("access_token");
+
+if (!token) {
+    window.location.href = "index.html";
+}
+
+
+// ============================================================
+// LOAD QR CODES
+// ============================================================
+
+async function loadQRCodes() {
+
+    const qrList =
+        document.getElementById("qrList");
+
+    try {
+
+        // ----------------------------------------------------
+        // GET ALL BATCHES
+        // ----------------------------------------------------
+
+        const batchResponse = await fetch(
+            "http://127.0.0.1:8000/batches/",
+            {
+                method: "GET",
+
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        );
+
+
+        if (!batchResponse.ok) {
+
+            if (batchResponse.status === 401) {
+
+                localStorage.removeItem(
+                    "access_token"
+                );
+
+                window.location.href =
+                    "index.html";
+
+                return;
+            }
+
+            throw new Error(
+                "Failed to load batches"
+            );
+        }
+
+
+        const batches =
+            await batchResponse.json();
+
+
+        if (batches.length === 0) {
+
+            qrList.innerHTML =
+                "<p>No batches found.</p>";
+
+            return;
+        }
+
+
+        qrList.innerHTML = "";
+
+
+        // ----------------------------------------------------
+        // PROCESS EACH BATCH
+        // ----------------------------------------------------
+
+        for (const batch of batches) {
+
+            const response = await fetch(
+                `http://127.0.0.1:8000/batches/${batch.id}/serialized`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+
+            if (!response.ok) {
+                continue;
+            }
+
+
+            const medicines =
+                await response.json();
+
+
+            // ------------------------------------------------
+            // SKIP BATCHES WITHOUT SERIALIZED MEDICINES
+            // ------------------------------------------------
+
+            if (medicines.length === 0) {
+                continue;
+            }
+
+
+            // ------------------------------------------------
+            // BATCH HEADING
+            // ------------------------------------------------
+
+            const batchHeading =
+                document.createElement("h3");
+
+            batchHeading.textContent =
+                `Batch: ${batch.batch_number}`;
+
+            batchHeading.style.marginTop =
+                "30px";
+
+            qrList.appendChild(
+                batchHeading
+            );
+
+
+            // ------------------------------------------------
+            // QR GRID
+            // ------------------------------------------------
+
+            const grid =
+                document.createElement("div");
+
+            grid.className =
+                "qr-grid";
+
+
+            // ------------------------------------------------
+            // CREATE QR CARDS
+            // ------------------------------------------------
+
+            medicines.forEach(
+                function (medicine) {
+
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
+
+                    card.className =
+                        "qr-card";
+
+
+                    const image =
+                        document.createElement(
+                            "img"
+                        );
+
+                    image.src =
+                        `http://127.0.0.1:8000/qr_codes/${medicine.serial_number}.png`;
+
+                    image.alt =
+                        `QR Code ${medicine.serial_number}`;
+
+
+                    const serial =
+                        document.createElement(
+                            "p"
+                        );
+
+                    serial.innerHTML =
+                        `<strong>Serial:</strong> ${medicine.serial_number}`;
+
+
+                    const status =
+                        document.createElement(
+                            "p"
+                        );
+
+                    status.innerHTML =
+                        `<strong>Status:</strong> ${medicine.status}`;
+
+
+                    card.appendChild(image);
+
+                    card.appendChild(serial);
+
+                    card.appendChild(status);
+
+
+                    grid.appendChild(card);
+
+                }
+            );
+
+
+            qrList.appendChild(grid);
+
+        }
+
+
+        // ----------------------------------------------------
+        // NO QR CODES
+        // ----------------------------------------------------
+
+        if (qrList.innerHTML === "") {
+
+            qrList.innerHTML =
+                "<p>No serialized medicines found.</p>";
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "QR loading error:",
+            error
+        );
+
+        qrList.innerHTML =
+            "<p>Could not load QR codes.</p>";
+    }
+}
+
+
+// ============================================================
+// LOGOUT
+// ============================================================
+
+document.getElementById("logoutBtn")
+    .addEventListener(
+        "click",
+        function () {
+
+            localStorage.removeItem(
+                "access_token"
+            );
+
+            window.location.href =
+                "index.html";
+        }
+    );
+
+
+// ============================================================
+// INITIAL LOAD
+// ============================================================
+
+loadQRCodes();

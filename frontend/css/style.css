@@ -1,0 +1,559 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+}
+
+.login-container {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    width: 400px;
+    padding: 35px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-card h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.login-card label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.login-card input {
+    width: 100%;
+    padding: 12px;
+
+    margin-bottom: 20px;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    font-size: 16px;
+}
+
+.login-card button {
+    width: 100%;
+    padding: 12px;
+
+    border: none;
+    border-radius: 6px;
+
+    background: #2563eb;
+    color: white;
+
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-card button:hover {
+    background: #1d4ed8;
+}
+
+#message {
+    text-align: center;
+    margin-top: 15px;
+}
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* SIDEBAR */
+
+.sidebar {
+    width: 240px;
+    background: #111827;
+    color: white;
+
+    padding: 25px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    margin-bottom: 5px;
+}
+
+.role {
+    color: #9ca3af;
+    margin-bottom: 30px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar nav a {
+    text-decoration: none;
+    color: #d1d5db;
+
+    padding: 12px;
+
+    border-radius: 6px;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+    background: #2563eb;
+    color: white;
+}
+
+
+/* LOGOUT */
+
+.logout-btn {
+    margin-top: auto;
+
+    padding: 12px;
+
+    border: none;
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    background: #dc2626;
+    color: white;
+}
+
+
+/* MAIN CONTENT */
+
+.main-content {
+    flex: 1;
+
+    padding: 35px;
+
+    background: #f4f7fb;
+}
+
+.dashboard-header {
+    margin-bottom: 30px;
+}
+
+.dashboard-header h1 {
+    margin-bottom: 8px;
+}
+
+.dashboard-header p {
+    color: #6b7280;
+}
+
+
+/* STATISTICS */
+
+.stats {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 20px;
+
+    margin-bottom: 35px;
+}
+
+.stat-card {
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 10px;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card h3 {
+    color: #6b7280;
+
+    font-size: 15px;
+
+    margin-bottom: 15px;
+}
+
+.stat-card p {
+    font-size: 30px;
+
+    font-weight: bold;
+}
+
+
+/* RECENT ACTIVITY */
+
+.dashboard-section {
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 10px;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-section h2 {
+    margin-bottom: 20px;
+}
+
+.activity-card {
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid #eee;
+}
+
+.activity-card span {
+    color: #6b7280;
+}
+/* MEDICINES FORM */
+
+#medicineForm {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 600px;
+}
+
+#medicineForm label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#medicineForm input,
+#medicineForm textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+#medicineForm textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+#medicineForm button {
+    margin-top: 15px;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#medicineForm button:hover {
+    background: #1d4ed8;
+}
+
+#medicineMessage {
+    margin-top: 15px;
+}
+
+/* BATCH FORM */
+
+#batchForm {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 600px;
+}
+
+#batchForm label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#batchForm input,
+#batchForm select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+#batchForm button {
+    margin-top: 15px;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#batchForm button:hover {
+    background: #1d4ed8;
+}
+
+#batchMessage {
+    margin-top: 15px;
+}
+
+/* SERIALIZATION */
+
+.serialize-btn {
+    margin-top: 15px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+}
+
+.serialize-btn:hover {
+    background: #1d4ed8;
+}
+
+.serialization-area {
+    margin-top: 15px;
+}
+
+.serialization-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 300px;
+}
+
+.serialization-form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.serialization-form button {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background: #16a34a;
+    color: white;
+    cursor: pointer;
+}
+
+/* QR BUTTON */
+
+.qr-btn {
+    margin-top: 10px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    background: #7c3aed;
+    color: white;
+    cursor: pointer;
+}
+
+.qr-btn:hover {
+    background: #6d28d9;
+}
+
+/* ============================================================
+   QR CODES
+============================================================ */
+
+.qr-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fill, minmax(220px, 1fr));
+
+    gap: 20px;
+
+    margin-top: 20px;
+}
+
+
+.qr-card {
+    background: white;
+
+    border: 1px solid #ddd;
+
+    border-radius: 10px;
+
+    padding: 20px;
+
+    text-align: center;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+.qr-card img {
+    width: 180px;
+
+    height: 180px;
+
+    object-fit: contain;
+
+    margin-bottom: 15px;
+}
+
+
+.qr-card p {
+    margin: 8px 0;
+
+    font-size: 14px;
+
+    word-break: break-word;
+}
+
+/* ============================================================
+   PUBLIC VERIFICATION PAGE
+============================================================ */
+
+.verification-page {
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 20px;
+
+    background: #f4f6f8;
+}
+
+
+.verification-card {
+    width: 100%;
+
+    max-width: 550px;
+
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.1);
+
+    text-align: center;
+}
+
+
+.verification-card h1 {
+    margin-bottom: 5px;
+}
+
+
+.verification-subtitle {
+    color: #666;
+
+    margin-bottom: 30px;
+}
+
+
+.verification-details {
+    text-align: left;
+
+    margin-top: 25px;
+
+    padding: 20px;
+
+    background: #f8fafc;
+
+    border-radius: 8px;
+}
+
+
+.verification-details p {
+    margin: 10px 0;
+}
+
+
+.verification-message {
+    margin-top: 25px;
+
+    font-size: 16px;
+}
+
+
+/* ============================================================
+   VERIFICATION STATUS
+============================================================ */
+
+.verification-authentic,
+.verification-expired,
+.verification-recalled,
+.verification-invalid {
+
+    padding: 18px;
+
+    border-radius: 8px;
+
+    margin-bottom: 20px;
+
+    font-size: 22px;
+
+    font-weight: bold;
+}
+
+
+.verification-authentic {
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+.verification-expired {
+    background: #fef3c7;
+
+    color: #92400e;
+}
+
+
+.verification-recalled {
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+.verification-invalid {
+    background: #fee2e2;
+
+    color: #991b1b;
+}

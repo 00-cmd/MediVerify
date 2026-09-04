@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediVerify - Medicines</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <h2>MediVerify</h2>
+
+            <p class="role">Manufacturer</p>
+
+            <nav>
+
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+
+                <a href="medicines.html" class="active">
+                    Medicines
+                </a>
+
+                <a href="batches.html">
+                    Batches
+                </a>
+
+                <a href="qr-codes.html">
+                    QR Codes
+                </a>
+
+                <a href="verification.html">
+                    Verification
+                </a>
+
+            </nav>
+
+            <button class="logout-btn" id="logoutBtn">
+                Logout
+            </button>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <header class="dashboard-header">
+
+                <div>
+                    <h1>Medicines</h1>
+
+                    <p>
+                        Manage medicines registered by your organization
+                    </p>
+                </div>
+
+            </header>
+
+
+            <!-- CREATE MEDICINE -->
+
+            <section class="dashboard-section">
+
+                <h2>Add New Medicine</h2>
+
+                <form id="medicineForm">
+
+                    <label for="name">
+                        Medicine Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter medicine name"
+                        required
+                    >
+
+
+                    <label for="manufacturer_name">
+                        Manufacturer Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="manufacturer_name"
+                        placeholder="Enter manufacturer name"
+                        required
+                    >
+
+
+                    <label for="composition">
+                        Composition
+                    </label>
+
+                    <input
+                        type="text"
+                        id="composition"
+                        placeholder="Example: Paracetamol 500mg"
+                    >
+
+
+                    <label for="description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        placeholder="Enter medicine description"
+                    ></textarea>
+
+
+                    <button type="submit">
+                        Create Medicine
+                    </button>
+
+                </form>
+
+                <p id="medicineMessage"></p>
+
+            </section>
+
+
+            <!-- MEDICINE LIST -->
+
+            <section class="dashboard-section">
+
+                <h2>Registered Medicines</h2>
+
+                <div id="medicineList">
+
+                    <p>Loading medicines...</p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="js/medicines.js"></script>
+
+</body>
+
+</html>

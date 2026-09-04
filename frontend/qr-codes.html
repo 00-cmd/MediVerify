@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediVerify - QR Codes</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- ==================================================
+             SIDEBAR
+        =================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-logo">
+                <h2>MediVerify</h2>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+
+                <a href="medicines.html">
+                    Medicines
+                </a>
+
+                <a href="batches.html">
+                    Batches
+                </a>
+
+                <a href="qr-codes.html" class="active">
+                    QR Codes
+                </a>
+
+                <a href="#">
+                    Verification
+                </a>
+
+            </nav>
+
+            <button id="logoutBtn">
+                Logout
+            </button>
+
+        </aside>
+
+
+        <!-- ==================================================
+             MAIN CONTENT
+        =================================================== -->
+
+        <main class="main-content">
+
+            <div class="page-header">
+
+                <div>
+                    <h1>QR Codes</h1>
+
+                    <p>
+                        Generated QR codes for serialized medicines
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 QR CODE LIST
+            =================================================== -->
+
+            <section class="content-section">
+
+                <h2>Generated QR Codes</h2>
+
+                <div id="qrList">
+
+                    <p>
+                        Loading QR codes...
+                    </p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="js/qr-codes.js"></script>
+
+</body>
+
+</html>
