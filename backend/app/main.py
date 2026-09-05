@@ -28,6 +28,7 @@ load_dotenv(BASE_DIR / ".env")
 
 FRONTEND_URL = os.getenv(
     "FRONTEND_URL",
+    "https://medverify-web.onrender.com"
     "http://127.0.0.1:5500"
 )
 
@@ -46,6 +47,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         FRONTEND_URL,
+        "https://medverify-web.onrender.com",
         "http://127.0.0.1:5500",
         "http://localhost:5500"
     ],
