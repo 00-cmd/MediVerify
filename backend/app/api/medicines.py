@@ -32,6 +32,10 @@ def create_medicine(
 
     new_medicine = Medicine(
         name=medicine_data.name,
+
+        # Manufacturer account that is currently logged in
+        manufacturer_id=current_user.id,
+
         manufacturer_name=medicine_data.manufacturer_name,
         composition=medicine_data.composition,
         description=medicine_data.description
@@ -65,7 +69,9 @@ def get_medicines(
     )
 ):
 
-    medicines = db.query(Medicine).all()
+    medicines = db.query(Medicine).filter(
+        Medicine.manufacturer_id == current_user.id
+    ).all()
 
     return medicines
 
@@ -83,15 +89,38 @@ def get_medicine_stats(
     )
 ):
 
-    total_medicines = db.query(Medicine).count()
-
-    total_batches = db.query(Batch).count()
-
-    total_serialized = db.query(
-        SerializedMedicine
+    # Only count this manufacturer's medicines
+    total_medicines = db.query(Medicine).filter(
+        Medicine.manufacturer_id == current_user.id
     ).count()
 
-    active_batches = db.query(Batch).filter(
+    # Only count batches belonging to this manufacturer's medicines
+    total_batches = db.query(Batch).join(
+        Medicine,
+        Batch.medicine_id == Medicine.id
+    ).filter(
+        Medicine.manufacturer_id == current_user.id
+    ).count()
+
+    # Only count serialized medicines belonging to this manufacturer's batches
+    total_serialized = db.query(
+        SerializedMedicine
+    ).join(
+        Batch,
+        SerializedMedicine.batch_id == Batch.id
+    ).join(
+        Medicine,
+        Batch.medicine_id == Medicine.id
+    ).filter(
+        Medicine.manufacturer_id == current_user.id
+    ).count()
+
+    # Only count active batches belonging to this manufacturer
+    active_batches = db.query(Batch).join(
+        Medicine,
+        Batch.medicine_id == Medicine.id
+    ).filter(
+        Medicine.manufacturer_id == current_user.id,
         Batch.status == "ACTIVE"
     ).count()
 
@@ -117,7 +146,8 @@ def get_medicine(
 ):
 
     medicine = db.query(Medicine).filter(
-        Medicine.id == medicine_id
+        Medicine.id == medicine_id,
+        Medicine.manufacturer_id == current_user.id
     ).first()
 
     if not medicine:

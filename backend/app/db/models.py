@@ -59,6 +59,12 @@ class User(Base):
 
     # Relationships
 
+    medicines = relationship(
+    "Medicine",
+    back_populates="manufacturer"
+)
+
+
     lifecycle_events = relationship(
         "LifecycleEvent",
         back_populates="actor"
@@ -84,6 +90,12 @@ class Medicine(Base):
         index=True
     )
 
+    manufacturer_id = Column(
+    Integer,
+    ForeignKey("users.id"),
+    nullable=True
+)
+
     name = Column(
         String(255),
         nullable=False
@@ -105,6 +117,12 @@ class Medicine(Base):
     )
 
     # Relationships
+
+    manufacturer = relationship(
+    "User",
+    back_populates="medicines"
+)
+
 
     batches = relationship(
         "Batch",

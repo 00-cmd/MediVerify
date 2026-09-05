@@ -5,17 +5,28 @@ from app.db.database import get_db
 from app.db.models import (
     LifecycleEvent,
     SerializedMedicine,
+    Batch,
+    Medicine,
     User
 )
+
 from app.schemas.lifecycle import LifecycleEventCreate
 from app.core.security import require_role
 
+
+# ============================================================
+# ROUTER
+# ============================================================
 
 router = APIRouter(
     prefix="/lifecycle",
     tags=["Lifecycle"]
 )
 
+
+# ============================================================
+# ALLOWED LIFECYCLE EVENTS
+# ============================================================
 
 ALLOWED_EVENTS = {
     "MANUFACTURED",
@@ -24,6 +35,10 @@ ALLOWED_EVENTS = {
     "SOLD"
 }
 
+
+# ============================================================
+# ADD LIFECYCLE EVENT
+# ============================================================
 
 @router.post("/{serialized_medicine_id}")
 def add_lifecycle_event(
@@ -34,10 +49,22 @@ def add_lifecycle_event(
         require_role("MANUFACTURER")
     )
 ):
+
+    # --------------------------------------------------------
+    # Find serialized medicine AND verify ownership
+    # --------------------------------------------------------
+
     serialized_medicine = db.query(
         SerializedMedicine
+    ).join(
+        Batch,
+        SerializedMedicine.batch_id == Batch.id
+    ).join(
+        Medicine,
+        Batch.medicine_id == Medicine.id
     ).filter(
-        SerializedMedicine.id == serialized_medicine_id
+        SerializedMedicine.id == serialized_medicine_id,
+        Medicine.manufacturer_id == current_user.id
     ).first()
 
     if not serialized_medicine:
@@ -46,18 +73,24 @@ def add_lifecycle_event(
             detail="Serialized medicine not found"
         )
 
+    # --------------------------------------------------------
+    # Validate event type
+    # --------------------------------------------------------
+
     event_type = event_data.event_type.upper()
 
     if event_type not in ALLOWED_EVENTS:
         raise HTTPException(
             status_code=400,
             detail=(
-                "Invalid event type. "
-                "Allowed events: "
-                "MANUFACTURED, DISTRIBUTED, "
-                "RECEIVED, SOLD"
+                "Invalid event type. Allowed events: "
+                "MANUFACTURED, DISTRIBUTED, RECEIVED, SOLD"
             )
         )
+
+    # --------------------------------------------------------
+    # Create lifecycle event
+    # --------------------------------------------------------
 
     new_event = LifecycleEvent(
         serialized_medicine_id=serialized_medicine.id,
@@ -75,8 +108,7 @@ def add_lifecycle_event(
         "message": "Lifecycle event added successfully",
         "event": {
             "id": new_event.id,
-            "serialized_medicine_id":
-                new_event.serialized_medicine_id,
+            "serialized_medicine_id": new_event.serialized_medicine_id,
             "event_type": new_event.event_type,
             "location": new_event.location,
             "timestamp": new_event.timestamp,
@@ -84,6 +116,10 @@ def add_lifecycle_event(
         }
     }
 
+
+# ============================================================
+# GET LIFECYCLE HISTORY
+# ============================================================
 
 @router.get("/{serialized_medicine_id}")
 def get_lifecycle_history(
@@ -93,10 +129,22 @@ def get_lifecycle_history(
         require_role("MANUFACTURER")
     )
 ):
+
+    # --------------------------------------------------------
+    # Find serialized medicine AND verify ownership
+    # --------------------------------------------------------
+
     serialized_medicine = db.query(
         SerializedMedicine
+    ).join(
+        Batch,
+        SerializedMedicine.batch_id == Batch.id
+    ).join(
+        Medicine,
+        Batch.medicine_id == Medicine.id
     ).filter(
-        SerializedMedicine.id == serialized_medicine_id
+        SerializedMedicine.id == serialized_medicine_id,
+        Medicine.manufacturer_id == current_user.id
     ).first()
 
     if not serialized_medicine:
@@ -105,20 +153,21 @@ def get_lifecycle_history(
             detail="Serialized medicine not found"
         )
 
+    # --------------------------------------------------------
+    # Get lifecycle events
+    # --------------------------------------------------------
+
     events = db.query(
         LifecycleEvent
     ).filter(
-        LifecycleEvent.serialized_medicine_id
-        == serialized_medicine_id
+        LifecycleEvent.serialized_medicine_id == serialized_medicine_id
     ).order_by(
         LifecycleEvent.timestamp.asc()
     ).all()
 
     return {
-        "serialized_medicine_id":
-            serialized_medicine.id,
-        "serial_number":
-            serialized_medicine.serial_number,
+        "serialized_medicine_id": serialized_medicine.id,
+        "serial_number": serialized_medicine.serial_number,
         "events": [
             {
                 "id": event.id,
