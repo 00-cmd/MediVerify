@@ -1,3 +1,8 @@
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -18,6 +23,14 @@ Base.metadata.create_all(bind=engine)
 # FASTAPI APP
 # ============================================================
 
+BASE_DIR = Path(__file__).resolve().parents[1]
+load_dotenv(BASE_DIR / ".env")
+
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL",
+    "http://127.0.0.1:5500"
+)
+
 app = FastAPI(
     title="MediVerify API",
     description="QR-Based Drug Authenticity & Lifecycle Traceability Platform",
@@ -32,6 +45,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        FRONTEND_URL,
         "http://127.0.0.1:5500",
         "http://localhost:5500"
     ],
