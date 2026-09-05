@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+
 
 from app.db.database import Base, engine
 from app.db import models
@@ -59,11 +59,7 @@ app.add_middleware(
 # QR CODE STATIC FILES
 # ============================================================
 
-app.mount(
-    "/qr_codes",
-    StaticFiles(directory="qr_codes"),
-    name="qr_codes"
-)
+
 
 
 # ============================================================

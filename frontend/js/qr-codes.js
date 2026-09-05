@@ -40,12 +40,9 @@ async function loadQRCodes() {
 
             if (batchResponse.status === 401) {
 
-                localStorage.removeItem(
-                    "token"
-                );
+                localStorage.removeItem("token");
 
-                window.location.href =
-                    "index.html";
+                window.location.href = "index.html";
 
                 return;
             }
@@ -154,17 +151,42 @@ async function loadQRCodes() {
                         "qr-card";
 
 
-                    const image =
-                        document.createElement(
-                            "img"
-                        );
+                    // ------------------------------------------------
+                    // QR CONTAINER
+                    // ------------------------------------------------
 
-                    image.src =
-                        `${API_URL}/qr_codes/${medicine.serial_number}.png`;
+                    const qrContainer =
+                        document.createElement("div");
 
-                    image.alt =
-                        `QR Code ${medicine.serial_number}`;
+                    qrContainer.className =
+                        "qr-image";
 
+
+                    // ------------------------------------------------
+                    // VERIFICATION URL
+                    // ------------------------------------------------
+
+                    const verificationURL =
+                        `${QR_FRONTEND_URL}/verification.html?token=${medicine.qr_token}`;
+
+
+                    // ------------------------------------------------
+                    // GENERATE QR CODE
+                    // ------------------------------------------------
+
+                    new QRCode(
+                        qrContainer,
+                        {
+                            text: verificationURL,
+                            width: 200,
+                            height: 200
+                        }
+                    );
+
+
+                    // ------------------------------------------------
+                    // SERIAL NUMBER
+                    // ------------------------------------------------
 
                     const serial =
                         document.createElement(
@@ -175,6 +197,10 @@ async function loadQRCodes() {
                         `<strong>Serial:</strong> ${medicine.serial_number}`;
 
 
+                    // ------------------------------------------------
+                    // STATUS
+                    // ------------------------------------------------
+
                     const status =
                         document.createElement(
                             "p"
@@ -184,27 +210,41 @@ async function loadQRCodes() {
                         `<strong>Status:</strong> ${medicine.status}`;
 
 
-                    card.appendChild(image);
+                    // ------------------------------------------------
+                    // ADD TO CARD
+                    // ------------------------------------------------
 
-                    card.appendChild(serial);
+                    card.appendChild(
+                        qrContainer
+                    );
 
-                    card.appendChild(status);
+                    card.appendChild(
+                        serial
+                    );
+
+                    card.appendChild(
+                        status
+                    );
 
 
-                    grid.appendChild(card);
+                    grid.appendChild(
+                        card
+                    );
 
                 }
             );
 
 
-            qrList.appendChild(grid);
+            qrList.appendChild(
+                grid
+            );
 
         }
 
 
-        // ------------------------------------------------
+        // ----------------------------------------------------
         // NO QR CODES
-        // ------------------------------------------------
+        // ----------------------------------------------------
 
         if (qrList.innerHTML === "") {
 
