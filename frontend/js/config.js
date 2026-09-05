@@ -1,3 +1,3 @@
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://medverify-backend-52fu.onrender.com";
 
-const QR_FRONTEND_URL = "http://127.0.0.1:5500/frontend";
+const QR_FRONTEND_URL = "https://medverify-web.onrender.com";
