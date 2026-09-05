@@ -1,4 +1,4 @@
-const token = localStorage.getItem("access_token");
+const token = localStorage.getItem("token");
 
 
 // ============================================================
@@ -37,7 +37,7 @@ async function loadMedicines() {
 
             if (response.status === 401) {
 
-                localStorage.removeItem("access_token");
+                localStorage.removeItem("token");
 
                 window.location.href = "index.html";
 
@@ -106,7 +106,7 @@ async function loadBatches() {
 
             if (response.status === 401) {
 
-                localStorage.removeItem("access_token");
+                localStorage.removeItem("token");
 
                 window.location.href = "index.html";
 
@@ -394,7 +394,7 @@ async function submitSerialization(batchId) {
 
             if (response.status === 401) {
 
-                localStorage.removeItem("access_token");
+                localStorage.removeItem("token");
 
                 window.location.href = "index.html";
 
@@ -495,7 +495,7 @@ async function generateQRCodes(batchId) {
 
             if (response.status === 401) {
 
-                localStorage.removeItem("access_token");
+                localStorage.removeItem("token");
 
                 window.location.href = "index.html";
 
@@ -631,7 +631,7 @@ document.getElementById("batchForm").addEventListener(
 
                 if (response.status === 401) {
 
-                    localStorage.removeItem("access_token");
+                    localStorage.removeItem("token");
 
                     window.location.href = "index.html";
 
@@ -683,7 +683,7 @@ document.getElementById("logoutBtn").addEventListener(
     "click",
     function () {
 
-        localStorage.removeItem("access_token");
+        localStorage.removeItem("token");
 
         window.location.href = "index.html";
 

@@ -2,7 +2,7 @@
 // AUTHENTICATION
 // ============================================================
 
-const token = localStorage.getItem("access_token");
+const token = localStorage.getItem("token");
 
 if (!token) {
     window.location.href = "index.html";
@@ -41,7 +41,7 @@ async function loadQRCodes() {
             if (batchResponse.status === 401) {
 
                 localStorage.removeItem(
-                    "access_token"
+                    "token"
                 );
 
                 window.location.href =
@@ -202,9 +202,9 @@ async function loadQRCodes() {
         }
 
 
-        // ----------------------------------------------------
+        // ------------------------------------------------
         // NO QR CODES
-        // ----------------------------------------------------
+        // ------------------------------------------------
 
         if (qrList.innerHTML === "") {
 
@@ -236,7 +236,7 @@ document.getElementById("logoutBtn")
         function () {
 
             localStorage.removeItem(
-                "access_token"
+                "token"
             );
 
             window.location.href =

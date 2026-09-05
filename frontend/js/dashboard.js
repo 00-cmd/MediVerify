@@ -1,4 +1,4 @@
-const token = localStorage.getItem("access_token");
+const token = localStorage.getItem("token");
 
 if (!token) {
     window.location.href = "index.html";
@@ -22,7 +22,7 @@ async function loadDashboardStats() {
         if (!response.ok) {
 
             if (response.status === 401) {
-                localStorage.removeItem("access_token");
+                localStorage.removeItem("token");
                 window.location.href = "index.html";
                 return;
             }

@@ -1,4 +1,4 @@
-const token = localStorage.getItem("access_token");
+const token = localStorage.getItem("token");
 
 
 // ------------------------------------------------------------
@@ -36,7 +36,7 @@ async function loadMedicines() {
 
             if (response.status === 401) {
 
-                localStorage.removeItem("access_token");
+                localStorage.removeItem("token");
 
                 window.location.href = "index.html";
 
@@ -117,7 +117,7 @@ document.getElementById("logoutBtn").addEventListener(
     "click",
     function () {
 
-        localStorage.removeItem("access_token");
+        localStorage.removeItem("token");
 
         window.location.href = "index.html";
 
@@ -130,6 +130,7 @@ document.getElementById("logoutBtn").addEventListener(
 // ------------------------------------------------------------
 
 loadMedicines();
+
 
 // ------------------------------------------------------------
 // CREATE MEDICINE
@@ -189,7 +190,7 @@ document.getElementById("medicineForm").addEventListener(
 
                 if (response.status === 401) {
 
-                    localStorage.removeItem("access_token");
+                    localStorage.removeItem("token");
 
                     window.location.href = "index.html";
 
