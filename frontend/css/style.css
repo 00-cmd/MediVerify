@@ -605,3 +605,149 @@ padding: 8px 0;
 font-size: 24px;
 font-weight: bold;
 }
+
+
+/* ============================================================
+   ADMIN DASHBOARD
+   ============================================================ */
+
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 240px;
+    min-height: 100vh;
+    padding: 25px 20px;
+    box-sizing: border-box;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar-logo {
+    margin-bottom: 35px;
+}
+
+.sidebar-logo h2 {
+    margin: 0;
+}
+
+.sidebar-logo p {
+    margin-top: 5px;
+    color: #777;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-nav a {
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+}
+
+.sidebar-nav a.active {
+    font-weight: bold;
+}
+
+.logout-btn {
+    margin-top: 30px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.main-content {
+    flex: 1;
+    padding: 30px;
+}
+
+.dashboard-header {
+    margin-bottom: 35px;
+}
+
+.dashboard-header h1 {
+    margin-bottom: 5px;
+}
+
+.dashboard-header p {
+    margin-top: 0;
+    color: #777;
+}
+
+.dashboard-section {
+    margin-bottom: 40px;
+}
+
+.dashboard-section h2 {
+    margin-bottom: 20px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+}
+
+.stat-card {
+    padding: 22px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.stat-card h3 {
+    margin: 0 0 15px;
+    font-size: 15px;
+}
+
+.stat-card p {
+    margin: 0;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.error-message {
+    margin-top: 25px;
+    padding: 15px;
+    color: #b00020;
+    font-weight: bold;
+}
+
+/* ============================================================
+   ADMIN USER MANAGEMENT
+   ============================================================ */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.table-container th,
+.table-container td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-container th {
+    font-weight: bold;
+}
+
+.user-action-btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}

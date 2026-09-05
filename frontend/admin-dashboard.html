@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediVerify - Admin Dashboard</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-logo">
+                <h2>MediVerify</h2>
+                <p>Admin Panel</p>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="admin-dashboard.html" class="active">
+                    Dashboard
+                </a>
+
+                <a href="admin-users.html">
+                    Users
+                </a>
+
+                <a href="#">
+                    Medicines
+                </a>
+
+                <a href="#">
+                    Batches
+                </a>
+
+                <a href="#">
+                    Lifecycle
+                </a>
+
+                <a href="#">
+                    Verification
+                </a>
+
+            </nav>
+
+            <button id="logoutBtn" class="logout-btn">
+                Logout
+            </button>
+
+        </aside>
+
+
+        <!-- ================= MAIN CONTENT ================= -->
+
+        <main class="main-content">
+
+            <header class="dashboard-header">
+
+                <div>
+                    <h1>Admin Dashboard</h1>
+                    <p>System overview and statistics</p>
+                </div>
+
+            </header>
+
+
+            <!-- ================= USERS ================= -->
+
+            <section class="dashboard-section">
+
+                <h2>Users</h2>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <h3>Total Users</h3>
+                        <p id="totalUsers">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Active Users</h3>
+                        <p id="activeUsers">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Inactive Users</h3>
+                        <p id="inactiveUsers">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Manufacturers</h3>
+                        <p id="manufacturers">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Chemists</h3>
+                        <p id="chemists">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Admins</h3>
+                        <p id="admins">-</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= MEDICINES ================= -->
+
+            <section class="dashboard-section">
+
+                <h2>Medicines</h2>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <h3>Total Medicines</h3>
+                        <p id="totalMedicines">-</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= BATCHES ================= -->
+
+            <section class="dashboard-section">
+
+                <h2>Batches</h2>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <h3>Total Batches</h3>
+                        <p id="totalBatches">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Active Batches</h3>
+                        <p id="activeBatches">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Recalled Batches</h3>
+                        <p id="recalledBatches">-</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= SERIALIZED MEDICINES ================= -->
+
+            <section class="dashboard-section">
+
+                <h2>Serialized Medicines</h2>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <h3>Total Serialized</h3>
+                        <p id="totalSerialized">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Manufactured</h3>
+                        <p id="manufacturedMedicines">-</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= VERIFICATIONS ================= -->
+
+            <section class="dashboard-section">
+
+                <h2>Verifications</h2>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <h3>Total Verifications</h3>
+                        <p id="totalVerifications">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Authentic</h3>
+                        <p id="authenticVerifications">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Expired</h3>
+                        <p id="expiredVerifications">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Recalled</h3>
+                        <p id="recalledVerifications">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Invalid</h3>
+                        <p id="invalidVerifications">-</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= LIFECYCLE ================= -->
+
+            <section class="dashboard-section">
+
+                <h2>Lifecycle Events</h2>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <h3>Total Events</h3>
+                        <p id="totalLifecycle">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Manufactured</h3>
+                        <p id="manufacturedEvents">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Distributed</h3>
+                        <p id="distributedEvents">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Received</h3>
+                        <p id="receivedEvents">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Sold</h3>
+                        <p id="soldEvents">-</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= RECALLS ================= -->
+
+            <section class="dashboard-section">
+
+                <h2>Recalls</h2>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <h3>Total Recalls</h3>
+                        <p id="totalRecalls">-</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Active Recalls</h3>
+                        <p id="activeRecalls">-</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= ERROR ================= -->
+
+            <div id="errorMessage" class="error-message"></div>
+
+        </main>
+
+    </div>
+
+
+    <script src="js/admin-dashboard.js"></script>
+
+</body>
+
+</html>

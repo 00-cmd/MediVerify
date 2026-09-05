@@ -91,28 +91,38 @@ def login_user(
     db: Session = Depends(get_db)
 ):
 
-    # Find user by email
     user = db.query(User).filter(
         User.email == user_data.email
     ).first()
 
+
     if not user:
+
         raise HTTPException(
             status_code=401,
             detail="Invalid email or password"
         )
 
-    # Verify password
+
+    if not user.is_active:
+
+        raise HTTPException(
+            status_code=403,
+            detail="User account is inactive"
+        )
+
+
     if not verify_password(
         user_data.password,
         user.password_hash
     ):
+
         raise HTTPException(
             status_code=401,
             detail="Invalid email or password"
         )
 
-    # Create JWT token
+
     access_token = create_access_token(
         data={
             "sub": str(user.id),
@@ -123,10 +133,12 @@ def login_user(
         )
     )
 
+
     return {
         "access_token": access_token,
         "token_type": "bearer"
     }
+
 # ============================================================
 # CURRENT USER
 # ============================================================

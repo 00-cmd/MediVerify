@@ -1,19 +1,29 @@
+const API_URL = "http://127.0.0.1:8000";
+
 const loginForm = document.getElementById("loginForm");
+const message = document.getElementById("message");
+
 
 loginForm.addEventListener("submit", async function (event) {
 
     event.preventDefault();
 
+    message.textContent = "";
+    message.style.color = "";
+
+
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    const message = document.getElementById("message");
 
-    message.textContent = "Logging in...";
 
     try {
 
-        const response = await fetch(
-            "http://127.0.0.1:8000/auth/login",
+        // ====================================================
+        // LOGIN
+        // ====================================================
+
+        const loginResponse = await fetch(
+            `${API_URL}/auth/login`,
             {
                 method: "POST",
 
@@ -28,29 +38,110 @@ loginForm.addEventListener("submit", async function (event) {
             }
         );
 
-        const data = await response.json();
 
-        if (!response.ok) {
+        if (!loginResponse.ok) {
+
+            const errorData = await loginResponse.json();
+
             message.textContent =
-                data.detail || "Login failed.";
+                errorData.detail || "Login failed.";
 
             return;
         }
 
-        // Save JWT token
+
+        const loginData = await loginResponse.json();
+
+
+        // ====================================================
+        // SAVE JWT TOKEN
+        // ====================================================
+
         localStorage.setItem(
-            "access_token",
-            data.access_token
+            "token",
+            loginData.access_token
         );
 
-        // Go to dashboard
-        window.location.href = "dashboard.html";
 
-    } catch (error) {
+        // ====================================================
+        // GET CURRENT USER
+        // ====================================================
 
-        console.error(error);
+        const profileResponse = await fetch(
+            `${API_URL}/auth/me`,
+            {
+                method: "GET",
+
+                headers: {
+                    "Authorization":
+                        `Bearer ${loginData.access_token}`
+                }
+            }
+        );
+
+
+        if (!profileResponse.ok) {
+
+            localStorage.removeItem("token");
+
+            message.textContent =
+                "Could not get user information.";
+
+            return;
+        }
+
+
+        const user = await profileResponse.json();
+
+
+        console.log("Logged in user:", user);
+
+
+        // ====================================================
+        // ROLE-BASED REDIRECT
+        // ====================================================
+
+        if (user.role === "ADMIN") {
+
+            window.location.href =
+                "admin-dashboard.html";
+
+        }
+
+        else if (user.role === "MANUFACTURER") {
+
+            window.location.href =
+                "dashboard.html";
+
+        }
+
+        else if (user.role === "CHEMIST") {
+
+            message.textContent =
+                "Chemist dashboard is not available yet.";
+
+            localStorage.removeItem("token");
+
+        }
+
+        else {
+
+            message.textContent =
+                "Unknown user role.";
+
+            localStorage.removeItem("token");
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error("Login error:", error);
 
         message.textContent =
-            "Could not connect to the server.";
+            "Unable to connect to the server.";
+
     }
+
 });

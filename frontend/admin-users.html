@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>MediVerify - Users</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="dashboard-container">
+
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-logo">
+
+                <h2>MediVerify</h2>
+
+                <p>Admin Panel</p>
+
+            </div>
+
+
+            <nav class="sidebar-nav">
+
+                <a href="admin-dashboard.html">
+                    Dashboard
+                </a>
+
+                <a
+                    href="admin-users.html"
+                    class="active"
+                >
+                    Users
+                </a>
+
+                <a href="medicines.html">
+                    Medicines
+                </a>
+
+                <a href="batches.html">
+                    Batches
+                </a>
+
+                <a href="lifecycle.html">
+                    Lifecycle
+                </a>
+
+                <a href="verification.html">
+                    Verification
+                </a>
+
+            </nav>
+
+
+            <button
+                id="logoutBtn"
+                class="logout-btn"
+            >
+                Logout
+            </button>
+
+        </aside>
+
+
+        <!-- ================= MAIN CONTENT ================= -->
+
+        <main class="main-content">
+
+
+            <header class="dashboard-header">
+
+                <h1>User Management</h1>
+
+                <p>
+                    Manage MediVerify user accounts
+                </p>
+
+            </header>
+
+
+            <!-- ================= USERS ================= -->
+
+            <section class="dashboard-section">
+
+                <h2>All Users</h2>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Name</th>
+
+                                <th>Email</th>
+
+                                <th>Role</th>
+
+                                <th>Status</th>
+
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="usersTableBody">
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                >
+                                    Loading users...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ================= MESSAGE ================= -->
+
+            <div
+                id="message"
+                class="error-message"
+            ></div>
+
+
+        </main>
+
+    </div>
+
+
+    <script src="js/admin-users.js"></script>
+
+</body>
+
+</html>
