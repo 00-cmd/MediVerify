@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends, HTTPException, status
@@ -11,7 +13,7 @@ from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.db.models import User
 
-
+load_dotenv()
 # ============================================================
 # PASSWORD HASHING
 # ============================================================
@@ -41,7 +43,10 @@ def verify_password(
 # JWT SETTINGS
 # ============================================================
 
-SECRET_KEY = "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_KEY"
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY is not configured")
 
 ALGORITHM = "HS256"
 
