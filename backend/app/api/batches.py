@@ -1,13 +1,33 @@
+import os
 from pathlib import Path
+import uuid
+
+from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-import uuid
 
 from app.services.qr_service import generate_qr_code
 from app.db.database import get_db
 from app.db.models import Batch, Medicine, User, SerializedMedicine
 from app.schemas.batch import BatchCreate, SerializationRequest
 from app.core.security import require_role
+
+
+# ============================================================
+# ENVIRONMENT CONFIGURATION
+# ============================================================
+
+# Find the backend folder
+BASE_DIR = Path(__file__).resolve().parents[1]
+
+# Load backend/.env
+load_dotenv(BASE_DIR / ".env")
+
+# Frontend URL used inside generated QR codes
+QR_FRONTEND_URL = os.getenv(
+    "QR_FRONTEND_URL",
+    "http://127.0.0.1:5500"
+)
 
 
 # ============================================================
@@ -401,8 +421,8 @@ def generate_batch_qr_codes(
         )
 
         verification_url = (
-            "http://127.0.0.1:5500/frontend/"
-            f"verification.html?token={medicine.qr_token}"
+            f"{QR_FRONTEND_URL}/verification.html"
+            f"?token={medicine.qr_token}"
         )
 
         generate_qr_code(
