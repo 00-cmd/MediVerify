@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>MediVerify - Lifecycle</title>
+
+<link rel="stylesheet" href="css/style.css">
+```
+
+</head>
+
+<body>
+
+```
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <h2>MediVerify</h2>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="medicines.html">
+                Medicines
+            </a>
+
+            <a href="batches.html">
+                Batches
+            </a>
+
+            <a href="qr-codes.html">
+                QR Codes
+            </a>
+
+            <a href="lifecycle.html" class="active">
+                Lifecycle
+            </a>
+
+        </nav>
+
+        <button id="logoutBtn">
+            Logout
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <div class="page-header">
+
+            <div>
+
+                <h1>
+                    Medicine Lifecycle
+                </h1>
+
+                <p>
+                    Track the movement of serialized medicines
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SELECT MEDICINE -->
+
+        <section class="content-section">
+
+            <h2>
+                Select Serialized Medicine
+            </h2>
+
+            <div class="form-group">
+
+                <label for="medicineSelect">
+                    Serialized Medicine
+                </label>
+
+                <select id="medicineSelect">
+
+                    <option value="">
+                        Loading medicines...
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- ADD EVENT -->
+
+        <section
+            class="content-section"
+            id="eventSection"
+            style="display: none;"
+        >
+
+            <h2>
+                Add Lifecycle Event
+            </h2>
+
+
+            <div class="form-group">
+
+                <label for="eventType">
+                    Event Type
+                </label>
+
+                <select id="eventType">
+
+                    <option value="MANUFACTURED">
+                        Manufactured
+                    </option>
+
+                    <option value="DISTRIBUTED">
+                        Distributed
+                    </option>
+
+                    <option value="RECEIVED">
+                        Received
+                    </option>
+
+                    <option value="SOLD">
+                        Sold
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="location">
+                    Location
+                </label>
+
+                <input
+                    type="text"
+                    id="location"
+                    placeholder="Example: Delhi Warehouse"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="notes">
+                    Notes
+                </label>
+
+                <textarea
+                    id="notes"
+                    placeholder="Optional notes"
+                    rows="4"
+                ></textarea>
+
+            </div>
+
+
+            <button id="addEventBtn">
+                Add Lifecycle Event
+            </button>
+
+
+            <p id="eventMessage"></p>
+
+        </section>
+
+
+        <!-- HISTORY -->
+
+        <section
+            class="content-section"
+            id="historySection"
+            style="display: none;"
+        >
+
+            <h2>
+                Lifecycle History
+            </h2>
+
+            <div id="lifecycleHistory">
+
+                <p>
+                    Select a medicine to view its history.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="js/lifecycle.js"></script>
+```
+
+</body>
+</html>

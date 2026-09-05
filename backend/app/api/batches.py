@@ -41,7 +41,6 @@ def create_batch(
     )
 ):
 
-    # Check if medicine exists
     medicine = db.query(Medicine).filter(
         Medicine.id == batch_data.medicine_id
     ).first()
@@ -52,7 +51,6 @@ def create_batch(
             detail="Medicine not found"
         )
 
-    # Check if batch number already exists
     existing_batch = db.query(Batch).filter(
         Batch.batch_number == batch_data.batch_number
     ).first()
@@ -63,14 +61,12 @@ def create_batch(
             detail="Batch number already exists"
         )
 
-    # Validate dates
     if batch_data.expiry_date <= batch_data.manufacturing_date:
         raise HTTPException(
             status_code=400,
             detail="Expiry date must be after manufacturing date"
         )
 
-    # Create batch
     new_batch = Batch(
         medicine_id=batch_data.medicine_id,
         batch_number=batch_data.batch_number,
@@ -114,6 +110,47 @@ def get_batches(
 
 
 # ============================================================
+# GET SERIALIZED MEDICINES FOR BATCH
+# IMPORTANT: Must be before /{batch_id}
+# ============================================================
+
+@router.get("/{batch_id}/serialized")
+def get_serialized_medicines(
+    batch_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(
+        require_role("MANUFACTURER")
+    )
+):
+
+    batch = db.query(Batch).filter(
+        Batch.id == batch_id
+    ).first()
+
+    if not batch:
+        raise HTTPException(
+            status_code=404,
+            detail="Batch not found"
+        )
+
+    serialized_medicines = db.query(
+        SerializedMedicine
+    ).filter(
+        SerializedMedicine.batch_id == batch_id
+    ).all()
+
+    return [
+        {
+            "id": medicine.id,
+            "serial_number": medicine.serial_number,
+            "qr_token": medicine.qr_token,
+            "status": medicine.status
+        }
+        for medicine in serialized_medicines
+    ]
+
+
+# ============================================================
 # GET BATCH BY ID
 # ============================================================
 
@@ -140,47 +177,6 @@ def get_batch(
 
 
 # ============================================================
-# GET SERIALIZED MEDICINES FOR BATCH
-# ============================================================
-
-@router.get("/{batch_id}/serialized")
-def get_serialized_medicines(
-    batch_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(
-        require_role("MANUFACTURER")
-    )
-):
-
-    # Check batch exists
-    batch = db.query(Batch).filter(
-        Batch.id == batch_id
-    ).first()
-
-    if not batch:
-        raise HTTPException(
-            status_code=404,
-            detail="Batch not found"
-        )
-
-    # Get serialized medicines
-    serialized_medicines = db.query(
-        SerializedMedicine
-    ).filter(
-        SerializedMedicine.batch_id == batch_id
-    ).all()
-
-    return [
-        {
-            "id": medicine.id,
-            "serial_number": medicine.serial_number,
-            "qr_token": medicine.qr_token,
-            "status": medicine.status
-        }
-        for medicine in serialized_medicines
-    ]
-
-# ============================================================
 # SERIALIZE BATCH
 # ============================================================
 
@@ -194,19 +190,11 @@ def serialize_batch(
     )
 ):
 
-    # --------------------------------------------------------
-    # CHECK QUANTITY
-    # --------------------------------------------------------
-
     if serialization_data.quantity <= 0:
         raise HTTPException(
             status_code=400,
             detail="Quantity must be greater than 0"
         )
-
-    # --------------------------------------------------------
-    # CHECK BATCH
-    # --------------------------------------------------------
 
     batch = db.query(Batch).filter(
         Batch.id == batch_id
@@ -218,29 +206,17 @@ def serialize_batch(
             detail="Batch not found"
         )
 
-    # --------------------------------------------------------
-    # CHECK BATCH STATUS
-    # --------------------------------------------------------
-
     if batch.status == "RECALLED":
         raise HTTPException(
             status_code=400,
             detail="Cannot serialize a recalled batch"
         )
 
-    # --------------------------------------------------------
-    # FIND EXISTING SERIALIZED MEDICINES
-    # --------------------------------------------------------
-
     existing_count = db.query(
         SerializedMedicine
     ).filter(
         SerializedMedicine.batch_id == batch_id
     ).count()
-
-    # --------------------------------------------------------
-    # GENERATE SERIAL NUMBERS
-    # --------------------------------------------------------
 
     generated_medicines = []
 
@@ -268,10 +244,6 @@ def serialize_batch(
             "status": "MANUFACTURED"
         })
 
-    # --------------------------------------------------------
-    # SAVE TO DATABASE
-    # --------------------------------------------------------
-
     try:
         db.commit()
 
@@ -282,10 +254,6 @@ def serialize_batch(
             status_code=500,
             detail="Failed to serialize batch"
         )
-
-    # --------------------------------------------------------
-    # RESPONSE
-    # --------------------------------------------------------
 
     return {
         "message": "Batch serialized successfully",
@@ -308,10 +276,6 @@ def generate_batch_qr_codes(
     )
 ):
 
-    # --------------------------------------------------------
-    # CHECK BATCH
-    # --------------------------------------------------------
-
     batch = db.query(Batch).filter(
         Batch.id == batch_id
     ).first()
@@ -321,10 +285,6 @@ def generate_batch_qr_codes(
             status_code=404,
             detail="Batch not found"
         )
-
-    # --------------------------------------------------------
-    # GET SERIALIZED MEDICINES
-    # --------------------------------------------------------
 
     serialized_medicines = db.query(
         SerializedMedicine
@@ -338,10 +298,6 @@ def generate_batch_qr_codes(
             detail="No serialized medicines found for this batch"
         )
 
-    # --------------------------------------------------------
-    # CREATE QR DIRECTORY
-    # --------------------------------------------------------
-
     qr_directory = Path("qr_codes")
 
     qr_directory.mkdir(
@@ -350,10 +306,6 @@ def generate_batch_qr_codes(
 
     generated_qrs = []
 
-    # --------------------------------------------------------
-    # GENERATE QR FOR EACH MEDICINE
-    # --------------------------------------------------------
-
     for medicine in serialized_medicines:
 
         file_path = (
@@ -361,20 +313,23 @@ def generate_batch_qr_codes(
             / f"{medicine.serial_number}.png"
         )
 
+        # QR contains the verification URL
+        verification_url = (
+            "http://127.0.0.1:5500/frontend/"
+            f"verification.html?token={medicine.qr_token}"
+        )
+
         generate_qr_code(
-            medicine.qr_token,
+            verification_url,
             str(file_path)
         )
 
         generated_qrs.append({
             "serial_number": medicine.serial_number,
             "qr_token": medicine.qr_token,
-            "file": str(file_path)
+            "file": str(file_path),
+            "verification_url": verification_url
         })
-
-    # --------------------------------------------------------
-    # RESPONSE
-    # --------------------------------------------------------
 
     return {
         "message": "QR codes generated successfully",

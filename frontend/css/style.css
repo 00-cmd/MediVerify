@@ -557,3 +557,51 @@ body {
 
     color: #991b1b;
 }
+
+
+
+.lifecycle-public {
+margin-top: 30px;
+padding-top: 25px;
+border-top: 1px solid #ddd;
+}
+
+.lifecycle-public h2 {
+margin-bottom: 25px;
+}
+
+.public-lifecycle-item {
+display: flex;
+gap: 15px;
+align-items: flex-start;
+}
+
+.lifecycle-dot {
+min-width: 35px;
+height: 35px;
+border-radius: 50%;
+background: #f1f1f1;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: bold;
+}
+
+.lifecycle-content {
+flex: 1;
+}
+
+.lifecycle-content h3 {
+margin: 0 0 10px;
+}
+
+.lifecycle-content p {
+margin: 6px 0;
+}
+
+.lifecycle-arrow {
+margin-left: 12px;
+padding: 8px 0;
+font-size: 24px;
+font-weight: bold;
+}

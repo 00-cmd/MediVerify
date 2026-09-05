@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.db.database import Base, engine
 from app.db import models
-from app.api import auth, medicines, batches, verify, admin
+from app.api import auth, medicines, batches, verify, admin,lifecycle
 
 
 # ============================================================
@@ -61,6 +61,7 @@ app.include_router(medicines.router)
 app.include_router(batches.router)
 app.include_router(verify.router)
 app.include_router(admin.router)
+app.include_router(lifecycle.router)
 
 
 # ============================================================

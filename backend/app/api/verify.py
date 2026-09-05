@@ -8,7 +8,6 @@ from app.db.models import (
     SerializedMedicine,
     Verification
 )
-
 from app.schemas.verification import VerificationResponse
 
 
@@ -27,22 +26,63 @@ def verify_medicine(
     db: Session = Depends(get_db)
 ):
 
+    # ========================================================
+    # FIND SERIALIZED MEDICINE
+    # ========================================================
+
     serialized_medicine = db.query(
         SerializedMedicine
     ).filter(
         SerializedMedicine.qr_token == qr_token
     ).first()
 
+
+    # ========================================================
+    # INVALID QR TOKEN
+    # ========================================================
+
     if not serialized_medicine:
+
         return {
             "result": "INVALID",
-            "message": "Medicine could not be verified"
+            "message": "Medicine could not be verified",
+            "lifecycle": []
         }
+
+
+    # ========================================================
+    # GET BATCH AND MEDICINE
+    # ========================================================
 
     batch = serialized_medicine.batch
     medicine = batch.medicine
 
-    # Check if batch is recalled
+
+    # ========================================================
+    # GET LIFECYCLE HISTORY
+    # ========================================================
+
+    lifecycle_events = sorted(
+        serialized_medicine.lifecycle_events,
+        key=lambda event: event.timestamp
+    )
+
+
+    lifecycle = [
+        {
+            "event_type": event.event_type,
+            "location": event.location,
+            "timestamp": event.timestamp,
+            "notes": event.notes
+        }
+        for event in lifecycle_events
+    ]
+
+
+    # ========================================================
+    # RECALLED
+    # ========================================================
+
     if batch.status == "RECALLED":
 
         verification = Verification(
@@ -55,14 +95,25 @@ def verify_medicine(
 
         return {
             "result": "RECALLED",
-            "serial_number": serialized_medicine.serial_number,
-            "medicine_name": medicine.name,
-            "batch_number": batch.batch_number,
-            "expiry_date": str(batch.expiry_date),
-            "message": "Medicine is authentic but this batch has been recalled"
+            "serial_number":
+                serialized_medicine.serial_number,
+            "medicine_name":
+                medicine.name,
+            "batch_number":
+                batch.batch_number,
+            "expiry_date":
+                str(batch.expiry_date),
+            "message":
+                "Medicine is authentic but this batch has been recalled",
+            "lifecycle":
+                lifecycle
         }
 
-    # Check expiry
+
+    # ========================================================
+    # EXPIRED
+    # ========================================================
+
     if batch.expiry_date < date.today():
 
         verification = Verification(
@@ -75,14 +126,25 @@ def verify_medicine(
 
         return {
             "result": "EXPIRED",
-            "serial_number": serialized_medicine.serial_number,
-            "medicine_name": medicine.name,
-            "batch_number": batch.batch_number,
-            "expiry_date": str(batch.expiry_date),
-            "message": "Medicine is authentic but has expired"
+            "serial_number":
+                serialized_medicine.serial_number,
+            "medicine_name":
+                medicine.name,
+            "batch_number":
+                batch.batch_number,
+            "expiry_date":
+                str(batch.expiry_date),
+            "message":
+                "Medicine is authentic but has expired",
+            "lifecycle":
+                lifecycle
         }
 
-    # Medicine is authentic and not expired
+
+    # ========================================================
+    # AUTHENTIC
+    # ========================================================
+
     verification = Verification(
         serialized_medicine_id=serialized_medicine.id,
         result="AUTHENTIC"
@@ -93,9 +155,16 @@ def verify_medicine(
 
     return {
         "result": "AUTHENTIC",
-        "serial_number": serialized_medicine.serial_number,
-        "medicine_name": medicine.name,
-        "batch_number": batch.batch_number,
-        "expiry_date": str(batch.expiry_date),
-        "message": "Medicine verified successfully"
+        "serial_number":
+            serialized_medicine.serial_number,
+        "medicine_name":
+            medicine.name,
+        "batch_number":
+            batch.batch_number,
+        "expiry_date":
+            str(batch.expiry_date),
+        "message":
+            "Medicine verified successfully",
+        "lifecycle":
+            lifecycle
     }

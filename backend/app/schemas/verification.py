@@ -1,6 +1,17 @@
 from pydantic import BaseModel
 
 
+class LifecycleEventResponse(BaseModel):
+
+    event_type: str
+
+    location: str | None = None
+
+    timestamp: str | None = None
+
+    notes: str | None = None
+
+
 class VerificationResponse(BaseModel):
 
     result: str
@@ -14,3 +25,5 @@ class VerificationResponse(BaseModel):
     expiry_date: str | None = None
 
     message: str
+
+    lifecycle: list[dict] = []
