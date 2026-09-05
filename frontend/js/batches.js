@@ -22,7 +22,7 @@ async function loadMedicines() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/medicines/",
+            `${API_URL}/medicines/`,
             {
                 method: "GET",
 
@@ -91,7 +91,7 @@ async function loadBatches() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/batches/",
+            `${API_URL}/batches/`,
             {
                 method: "GET",
 
@@ -365,7 +365,7 @@ async function submitSerialization(batchId) {
 
         const response = await fetch(
 
-            `http://127.0.0.1:8000/batches/${batchId}/serialize`,
+            `${API_URL}/batches/${batchId}/serialize`,
 
             {
                 method: "POST",
@@ -471,7 +471,7 @@ async function generateQRCodes(batchId) {
 
         const response = await fetch(
 
-            `http://127.0.0.1:8000/batches/${batchId}/generate-qr`,
+            `${API_URL}/batches/${batchId}/generate-qr`,
 
             {
                 method: "POST",
@@ -590,7 +590,7 @@ document.getElementById("batchForm").addEventListener(
 
             const response = await fetch(
 
-                "http://127.0.0.1:8000/batches/",
+                `${API_URL}/batches/`,
 
                 {
                     method: "POST",

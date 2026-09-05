@@ -21,7 +21,7 @@ async function loadMedicines() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/medicines/",
+            `${API_URL}/medicines/`,
             {
                 method: "GET",
 
@@ -164,7 +164,7 @@ document.getElementById("medicineForm").addEventListener(
         try {
 
             const response = await fetch(
-                "http://127.0.0.1:8000/medicines/",
+                `${API_URL}/medicines/`,
                 {
                     method: "POST",
 

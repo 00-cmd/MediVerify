@@ -25,7 +25,7 @@ async function loadQRCodes() {
         // ----------------------------------------------------
 
         const batchResponse = await fetch(
-            "http://127.0.0.1:8000/batches/",
+            `${API_URL}/batches/`,
             {
                 method: "GET",
 
@@ -79,7 +79,7 @@ async function loadQRCodes() {
         for (const batch of batches) {
 
             const response = await fetch(
-                `http://127.0.0.1:8000/batches/${batch.id}/serialized`,
+                `${API_URL}/batches/${batch.id}/serialized`,
                 {
                     method: "GET",
 
@@ -160,7 +160,7 @@ async function loadQRCodes() {
                         );
 
                     image.src =
-                        `http://127.0.0.1:8000/qr_codes/${medicine.serial_number}.png`;
+                        `${API_URL}/qr_codes/${medicine.serial_number}.png`;
 
                     image.alt =
                         `QR Code ${medicine.serial_number}`;

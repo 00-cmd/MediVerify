@@ -44,7 +44,7 @@ async function loadSerializedMedicines() {
     try {
 
         const batchResponse = await fetch(
-            "http://127.0.0.1:8000/batches/",
+            `${API_URL}/batches/`,
             {
                 method: "GET",
 
@@ -89,7 +89,7 @@ async function loadSerializedMedicines() {
         for (const batch of batches) {
 
             const response = await fetch(
-                `http://127.0.0.1:8000/batches/${batch.id}/serialized`,
+                `${API_URL}/batches/${batch.id}/serialized`,
                 {
                     method: "GET",
 
@@ -228,7 +228,7 @@ async function () {
     try {
 
         const response = await fetch(
-            `http://127.0.0.1:8000/lifecycle/${medicineId}`,
+            `${API_URL}/lifecycle/${medicineId}`,
             {
                 method: "POST",
 
@@ -323,7 +323,7 @@ medicineId
     try {
 
         const response = await fetch(
-            `http://127.0.0.1:8000/lifecycle/${medicineId}`,
+            `${API_URL}/lifecycle/${medicineId}`,
             {
                 method: "GET",
 

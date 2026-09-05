@@ -10,7 +10,7 @@ async function loadDashboardStats() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/medicines/stats",
+            `${API_URL}/medicines/stats`,
             {
                 method: "GET",
                 headers: {
