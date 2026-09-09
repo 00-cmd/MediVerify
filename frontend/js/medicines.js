@@ -113,17 +113,6 @@ async function loadMedicines() {
 // LOGOUT
 // ------------------------------------------------------------
 
-document.getElementById("logoutBtn").addEventListener(
-    "click",
-    function () {
-
-        localStorage.removeItem("token");
-
-        window.location.href = "index.html";
-
-    }
-);
-
 
 // ------------------------------------------------------------
 // INITIAL LOAD
