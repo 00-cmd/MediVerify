@@ -1139,3 +1139,29 @@ color: var(--gov-gold);
         font-size: 28px;
     }
 }
+
+/* =========================================
+   LOGIN - REGISTRATION LINK
+   ========================================= */
+
+.login-register {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.login-register p {
+    margin: 0;
+    color: var(--gov-text-muted);
+    font-size: 14px;
+}
+
+.login-register a {
+    color: var(--gov-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-register a:hover {
+    color: var(--gov-blue-dark);
+    text-decoration: underline;
+}
