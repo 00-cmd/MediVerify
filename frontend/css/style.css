@@ -693,60 +693,87 @@ a {
     color: var(--gov-red);
 }
 
-
+/* ============================================================
+   LIFECYCLE PAGE
+============================================================ */
 
 .lifecycle-public {
-margin-top: 30px;
-padding-top: 25px;
-border-top: 1px solid var(--gov-border);
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid var(--gov-border);
 }
 
 .lifecycle-public h2 {
-margin-bottom: 25px;
-font-family: var(--gov-font-heading);
-color: var(--gov-navy);
-text-align: left;
+    margin-bottom: 25px;
+    font-family: var(--gov-font-heading);
+    color: var(--gov-navy);
+    text-align: left;
 }
 
 .public-lifecycle-item {
-display: flex;
-gap: 15px;
-align-items: flex-start;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+
+    padding: 15px 0;
 }
 
 .lifecycle-dot {
-min-width: 35px;
-height: 35px;
-border-radius: 50%;
-background: var(--gov-navy);
-color: white;
-display: flex;
-align-items: center;
-justify-content: center;
-font-weight: bold;
+    min-width: 35px;
+    height: 35px;
+
+    border-radius: 50%;
+
+    background: var(--gov-navy);
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+    flex-shrink: 0;
 }
 
 .lifecycle-content {
-flex: 1;
-text-align: left;
+    flex: 1;
+    text-align: left;
+
+    color: var(--gov-text);
 }
 
 .lifecycle-content h3 {
-margin: 0 0 10px;
-color: var(--gov-text);
+    margin: 0 0 10px;
+
+    color: var(--gov-navy);
+
+    font-family: var(--gov-font-heading);
+    font-size: 18px;
+    font-weight: 700;
 }
 
 .lifecycle-content p {
-margin: 6px 0;
-color: var(--gov-text-muted);
+    margin: 6px 0;
+
+    color: var(--gov-text);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.lifecycle-content p strong {
+    color: var(--gov-navy);
 }
 
 .lifecycle-arrow {
-margin-left: 12px;
-padding: 8px 0;
-font-size: 24px;
-font-weight: bold;
-color: var(--gov-gold);
+    margin-left: 12px;
+    padding: 8px 0;
+
+    font-size: 24px;
+    font-weight: bold;
+
+    color: var(--gov-gold);
+
+    text-align: center;
 }
 
 
@@ -1164,4 +1191,38 @@ color: var(--gov-gold);
 .login-register a:hover {
     color: var(--gov-blue-dark);
     text-decoration: underline;
+}
+
+/* ============================================================
+   LIFECYCLE MEDICINE DROPDOWN
+============================================================ */
+
+#medicineSelect {
+    width: 100%;
+    max-width: 600px;
+
+    padding: 12px 14px;
+
+    border: 1px solid var(--gov-border);
+    border-radius: 6px;
+
+    background: var(--gov-surface);
+    color: var(--gov-text);
+
+    font-family: var(--gov-font-body);
+    font-size: 15px;
+
+    cursor: pointer;
+
+    outline: none;
+}
+
+#medicineSelect:focus {
+    border-color: var(--gov-blue);
+    box-shadow: 0 0 0 3px rgba(20, 90, 158, 0.15);
+}
+
+#medicineSelect option {
+    background: var(--gov-surface);
+    color: var(--gov-text);
 }
