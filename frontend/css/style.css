@@ -1,3 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Core palette: deep civic navy + restrained gold accent */
+    --gov-navy: #0b3d63;
+    --gov-navy-dark: #072544;
+    --gov-blue: #145a9e;
+    --gov-blue-dark: #0e4478;
+    --gov-teal: #0c6674;
+    --gov-teal-dark: #094e59;
+    --gov-gold: #a97c2f;
+    --gov-gold-dark: #8a6425;
+
+    /* Surfaces & text */
+    --gov-bg: #eef1f5;
+    --gov-surface: #ffffff;
+    --gov-border: #d6dce4;
+    --gov-text: #1b2430;
+    --gov-text-muted: #5a6472;
+
+    /* Status colors */
+    --gov-green: #146c43;
+    --gov-green-bg: #e2f3ea;
+    --gov-amber: #92400e;
+    --gov-amber-bg: #fdf1dc;
+    --gov-red: #9c1c1c;
+    --gov-red-bg: #fbe4e4;
+
+    /* Typography */
+    --gov-font-heading: 'Merriweather', Georgia, 'Times New Roman', serif;
+    --gov-font-body: 'Public Sans', 'Segoe UI', Arial, sans-serif;
+
+    /* Aliases used by the registration page below, mapped onto the gov palette */
+    --em-bg: var(--gov-navy-dark);
+    --em-card: rgba(255, 255, 255, 0.07);
+    --em-border: rgba(255, 255, 255, 0.16);
+    --em-violet: var(--gov-blue);
+    --em-cyan: var(--gov-gold);
+    --em-dim: rgba(255, 255, 255, 0.62);
+    --em-text: #f2f4f7;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -5,8 +47,18 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #f4f7fb;
+    font-family: var(--gov-font-body);
+    background: var(--gov-bg);
+    color: var(--gov-text);
+}
+
+a {
+    color: var(--gov-blue);
+}
+
+:focus-visible {
+    outline: 3px solid var(--gov-gold);
+    outline-offset: 2px;
 }
 
 .login-container {
@@ -21,21 +73,25 @@ body {
     width: 400px;
     padding: 35px;
 
-    background: white;
+    background: var(--gov-surface);
+    border: 1px solid var(--gov-border);
+    border-top: 4px solid var(--gov-gold);
 
-    border-radius: 12px;
+    border-radius: 8px;
 
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 20px rgba(11, 61, 99, 0.1);
 }
 
 .login-card h1 {
     text-align: center;
     margin-bottom: 10px;
+    font-family: var(--gov-font-heading);
+    color: var(--gov-navy);
 }
 
 .subtitle {
     text-align: center;
-    color: #666;
+    color: var(--gov-text-muted);
     margin-bottom: 30px;
 }
 
@@ -43,6 +99,7 @@ body {
     display: block;
     margin-bottom: 6px;
     font-weight: bold;
+    color: var(--gov-text);
 }
 
 .login-card input {
@@ -51,10 +108,17 @@ body {
 
     margin-bottom: 20px;
 
-    border: 1px solid #ccc;
+    border: 1px solid var(--gov-border);
     border-radius: 6px;
 
     font-size: 16px;
+    font-family: inherit;
+}
+
+.login-card input:focus {
+    outline: none;
+    border-color: var(--gov-blue);
+    box-shadow: 0 0 0 3px rgba(20, 90, 158, 0.15);
 }
 
 .login-card button {
@@ -64,20 +128,22 @@ body {
     border: none;
     border-radius: 6px;
 
-    background: #2563eb;
+    background: var(--gov-navy);
     color: white;
 
     font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
 }
 
 .login-card button:hover {
-    background: #1d4ed8;
+    background: var(--gov-navy-dark);
 }
 
 #message {
     text-align: center;
     margin-top: 15px;
+    color: var(--gov-text-muted);
 }
 /* =========================
    DASHBOARD
@@ -93,7 +159,7 @@ body {
 
 .sidebar {
     width: 240px;
-    background: #111827;
+    background: var(--gov-navy-dark);
     color: white;
 
     padding: 25px;
@@ -104,10 +170,11 @@ body {
 
 .sidebar h2 {
     margin-bottom: 5px;
+    font-family: var(--gov-font-heading);
 }
 
 .role {
-    color: #9ca3af;
+    color: rgba(255, 255, 255, 0.6);
     margin-bottom: 30px;
 }
 
@@ -119,16 +186,18 @@ body {
 
 .sidebar nav a {
     text-decoration: none;
-    color: #d1d5db;
+    color: rgba(255, 255, 255, 0.75);
 
     padding: 12px;
 
     border-radius: 6px;
+    border-left: 3px solid transparent;
 }
 
 .sidebar nav a:hover,
 .sidebar nav a.active {
-    background: #2563eb;
+    background: rgba(255, 255, 255, 0.08);
+    border-left: 3px solid var(--gov-gold);
     color: white;
 }
 
@@ -145,8 +214,13 @@ body {
 
     cursor: pointer;
 
-    background: #dc2626;
+    background: var(--gov-red);
     color: white;
+    font-weight: 600;
+}
+
+.logout-btn:hover {
+    background: #7d1616;
 }
 
 
@@ -157,7 +231,7 @@ body {
 
     padding: 35px;
 
-    background: #f4f7fb;
+    background: var(--gov-bg);
 }
 
 .dashboard-header {
@@ -166,10 +240,12 @@ body {
 
 .dashboard-header h1 {
     margin-bottom: 8px;
+    font-family: var(--gov-font-heading);
+    color: var(--gov-navy);
 }
 
 .dashboard-header p {
-    color: #6b7280;
+    color: var(--gov-text-muted);
 }
 
 
@@ -186,44 +262,52 @@ body {
 }
 
 .stat-card {
-    background: white;
+    background: var(--gov-surface);
+    border: 1px solid var(--gov-border);
+    border-left: 4px solid var(--gov-blue);
 
     padding: 25px;
 
-    border-radius: 10px;
+    border-radius: 8px;
 
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 3px 12px rgba(11, 61, 99, 0.06);
 }
 
 .stat-card h3 {
-    color: #6b7280;
+    color: var(--gov-text-muted);
 
     font-size: 15px;
 
     margin-bottom: 15px;
+    font-weight: 600;
 }
 
 .stat-card p {
     font-size: 30px;
 
     font-weight: bold;
+    color: var(--gov-navy);
+    font-family: var(--gov-font-heading);
 }
 
 
 /* RECENT ACTIVITY */
 
 .dashboard-section {
-    background: white;
+    background: var(--gov-surface);
+    border: 1px solid var(--gov-border);
 
     padding: 25px;
 
-    border-radius: 10px;
+    border-radius: 8px;
 
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 3px 12px rgba(11, 61, 99, 0.06);
 }
 
 .dashboard-section h2 {
     margin-bottom: 20px;
+    font-family: var(--gov-font-heading);
+    color: var(--gov-navy);
 }
 
 .activity-card {
@@ -233,11 +317,11 @@ body {
 
     padding: 15px 0;
 
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--gov-border);
 }
 
 .activity-card span {
-    color: #6b7280;
+    color: var(--gov-text-muted);
 }
 /* MEDICINES FORM */
 
@@ -251,15 +335,24 @@ body {
 #medicineForm label {
     font-weight: bold;
     margin-top: 10px;
+    color: var(--gov-text);
 }
 
 #medicineForm input,
 #medicineForm textarea {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--gov-border);
     border-radius: 6px;
     font-size: 16px;
+    font-family: inherit;
+}
+
+#medicineForm input:focus,
+#medicineForm textarea:focus {
+    outline: none;
+    border-color: var(--gov-blue);
+    box-shadow: 0 0 0 3px rgba(20, 90, 158, 0.15);
 }
 
 #medicineForm textarea {
@@ -272,18 +365,20 @@ body {
     padding: 12px;
     border: none;
     border-radius: 6px;
-    background: #2563eb;
+    background: var(--gov-navy);
     color: white;
     font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
 }
 
 #medicineForm button:hover {
-    background: #1d4ed8;
+    background: var(--gov-navy-dark);
 }
 
 #medicineMessage {
     margin-top: 15px;
+    color: var(--gov-text-muted);
 }
 
 /* BATCH FORM */
@@ -298,15 +393,24 @@ body {
 #batchForm label {
     font-weight: bold;
     margin-top: 10px;
+    color: var(--gov-text);
 }
 
 #batchForm input,
 #batchForm select {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--gov-border);
     border-radius: 6px;
     font-size: 16px;
+    font-family: inherit;
+}
+
+#batchForm input:focus,
+#batchForm select:focus {
+    outline: none;
+    border-color: var(--gov-blue);
+    box-shadow: 0 0 0 3px rgba(20, 90, 158, 0.15);
 }
 
 #batchForm button {
@@ -314,18 +418,20 @@ body {
     padding: 12px;
     border: none;
     border-radius: 6px;
-    background: #2563eb;
+    background: var(--gov-navy);
     color: white;
     font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
 }
 
 #batchForm button:hover {
-    background: #1d4ed8;
+    background: var(--gov-navy-dark);
 }
 
 #batchMessage {
     margin-top: 15px;
+    color: var(--gov-text-muted);
 }
 
 /* SERIALIZATION */
@@ -335,13 +441,14 @@ body {
     padding: 10px 15px;
     border: none;
     border-radius: 6px;
-    background: #2563eb;
+    background: var(--gov-gold);
     color: white;
+    font-weight: 600;
     cursor: pointer;
 }
 
 .serialize-btn:hover {
-    background: #1d4ed8;
+    background: var(--gov-gold-dark);
 }
 
 .serialization-area {
@@ -357,16 +464,18 @@ body {
 
 .serialization-form input {
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--gov-border);
     border-radius: 6px;
+    font-family: inherit;
 }
 
 .serialization-form button {
     padding: 10px;
     border: none;
     border-radius: 6px;
-    background: #16a34a;
+    background: var(--gov-green);
     color: white;
+    font-weight: 600;
     cursor: pointer;
 }
 
@@ -377,13 +486,14 @@ body {
     padding: 10px 15px;
     border: none;
     border-radius: 6px;
-    background: #7c3aed;
+    background: var(--gov-teal);
     color: white;
+    font-weight: 600;
     cursor: pointer;
 }
 
 .qr-btn:hover {
-    background: #6d28d9;
+    background: var(--gov-teal-dark);
 }
 
 /* ============================================================
@@ -402,18 +512,19 @@ body {
 
 
 .qr-card {
-    background: white;
+    background: var(--gov-surface);
 
-    border: 1px solid #ddd;
+    border: 1px solid var(--gov-border);
+    border-top: 3px solid var(--gov-navy);
 
-    border-radius: 10px;
+    border-radius: 8px;
 
     padding: 20px;
 
     text-align: center;
 
     box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.08);
+        0 2px 8px rgba(11, 61, 99, 0.08);
 }
 
 
@@ -425,6 +536,10 @@ body {
     object-fit: contain;
 
     margin-bottom: 15px;
+    padding: 8px;
+    background: white;
+    border: 1px solid var(--gov-border);
+    border-radius: 6px;
 }
 
 
@@ -434,6 +549,7 @@ body {
     font-size: 14px;
 
     word-break: break-word;
+    color: var(--gov-text-muted);
 }
 
 /* ============================================================
@@ -451,7 +567,7 @@ body {
 
     padding: 20px;
 
-    background: #f4f6f8;
+    background: var(--gov-bg);
 }
 
 
@@ -460,14 +576,16 @@ body {
 
     max-width: 550px;
 
-    background: white;
+    background: var(--gov-surface);
+    border: 1px solid var(--gov-border);
+    border-top: 5px solid var(--gov-navy);
 
     padding: 40px;
 
-    border-radius: 12px;
+    border-radius: 10px;
 
     box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.1);
+        0 4px 20px rgba(11, 61, 99, 0.12);
 
     text-align: center;
 }
@@ -475,11 +593,13 @@ body {
 
 .verification-card h1 {
     margin-bottom: 5px;
+    font-family: var(--gov-font-heading);
+    color: var(--gov-navy);
 }
 
 
 .verification-subtitle {
-    color: #666;
+    color: var(--gov-text-muted);
 
     margin-bottom: 30px;
 }
@@ -492,7 +612,8 @@ body {
 
     padding: 20px;
 
-    background: #f8fafc;
+    background: var(--gov-bg);
+    border: 1px solid var(--gov-border);
 
     border-radius: 8px;
 }
@@ -507,6 +628,7 @@ body {
     margin-top: 25px;
 
     font-size: 16px;
+    color: var(--gov-text);
 }
 
 
@@ -532,30 +654,30 @@ body {
 
 
 .verification-authentic {
-    background: #dcfce7;
+    background: var(--gov-green-bg);
 
-    color: #166534;
+    color: var(--gov-green);
 }
 
 
 .verification-expired {
-    background: #fef3c7;
+    background: var(--gov-amber-bg);
 
-    color: #92400e;
+    color: var(--gov-amber);
 }
 
 
 .verification-recalled {
-    background: #fee2e2;
+    background: var(--gov-red-bg);
 
-    color: #991b1b;
+    color: var(--gov-red);
 }
 
 
 .verification-invalid {
-    background: #fee2e2;
+    background: var(--gov-red-bg);
 
-    color: #991b1b;
+    color: var(--gov-red);
 }
 
 
@@ -563,11 +685,14 @@ body {
 .lifecycle-public {
 margin-top: 30px;
 padding-top: 25px;
-border-top: 1px solid #ddd;
+border-top: 1px solid var(--gov-border);
 }
 
 .lifecycle-public h2 {
 margin-bottom: 25px;
+font-family: var(--gov-font-heading);
+color: var(--gov-navy);
+text-align: left;
 }
 
 .public-lifecycle-item {
@@ -580,7 +705,8 @@ align-items: flex-start;
 min-width: 35px;
 height: 35px;
 border-radius: 50%;
-background: #f1f1f1;
+background: var(--gov-navy);
+color: white;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -589,14 +715,17 @@ font-weight: bold;
 
 .lifecycle-content {
 flex: 1;
+text-align: left;
 }
 
 .lifecycle-content h3 {
 margin: 0 0 10px;
+color: var(--gov-text);
 }
 
 .lifecycle-content p {
 margin: 6px 0;
+color: var(--gov-text-muted);
 }
 
 .lifecycle-arrow {
@@ -604,6 +733,7 @@ margin-left: 12px;
 padding: 8px 0;
 font-size: 24px;
 font-weight: bold;
+color: var(--gov-gold);
 }
 
 
@@ -621,7 +751,9 @@ font-weight: bold;
     min-height: 100vh;
     padding: 25px 20px;
     box-sizing: border-box;
-    border-right: 1px solid #ddd;
+    background: var(--gov-navy-dark);
+    color: white;
+    border-right: 1px solid var(--gov-border);
 }
 
 .sidebar-logo {
@@ -630,11 +762,12 @@ font-weight: bold;
 
 .sidebar-logo h2 {
     margin: 0;
+    font-family: var(--gov-font-heading);
 }
 
 .sidebar-logo p {
     margin-top: 5px;
-    color: #777;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .sidebar-nav {
@@ -645,12 +778,22 @@ font-weight: bold;
 
 .sidebar-nav a {
     text-decoration: none;
+    color: rgba(255, 255, 255, 0.75);
     padding: 12px 15px;
     border-radius: 8px;
+    border-left: 3px solid transparent;
+}
+
+.sidebar-nav a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
 }
 
 .sidebar-nav a.active {
     font-weight: bold;
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+    border-left: 3px solid var(--gov-gold);
 }
 
 .logout-btn {
@@ -660,11 +803,19 @@ font-weight: bold;
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    background: var(--gov-red);
+    color: white;
+    font-weight: 600;
+}
+
+.logout-btn:hover {
+    background: #7d1616;
 }
 
 .main-content {
     flex: 1;
     padding: 30px;
+    background: var(--gov-bg);
 }
 
 .dashboard-header {
@@ -673,11 +824,13 @@ font-weight: bold;
 
 .dashboard-header h1 {
     margin-bottom: 5px;
+    font-family: var(--gov-font-heading);
+    color: var(--gov-navy);
 }
 
 .dashboard-header p {
     margin-top: 0;
-    color: #777;
+    color: var(--gov-text-muted);
 }
 
 .dashboard-section {
@@ -686,6 +839,8 @@ font-weight: bold;
 
 .dashboard-section h2 {
     margin-bottom: 20px;
+    font-family: var(--gov-font-heading);
+    color: var(--gov-navy);
 }
 
 .stats-grid {
@@ -696,27 +851,34 @@ font-weight: bold;
 
 .stat-card {
     padding: 22px;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    background: #fff;
+    border: 1px solid var(--gov-border);
+    border-left: 4px solid var(--gov-blue);
+    border-radius: 8px;
+    background: var(--gov-surface);
 }
 
 .stat-card h3 {
     margin: 0 0 15px;
     font-size: 15px;
+    color: var(--gov-text-muted);
+    font-weight: 600;
 }
 
 .stat-card p {
     margin: 0;
     font-size: 30px;
     font-weight: bold;
+    color: var(--gov-navy);
+    font-family: var(--gov-font-heading);
 }
 
 .error-message {
     margin-top: 25px;
     padding: 15px;
-    color: #b00020;
+    background: var(--gov-red-bg);
+    color: var(--gov-red);
     font-weight: bold;
+    border-radius: 6px;
 }
 
 /* ============================================================
@@ -731,18 +893,27 @@ font-weight: bold;
 .table-container table {
     width: 100%;
     border-collapse: collapse;
-    background: #fff;
+    background: var(--gov-surface);
+    border: 1px solid var(--gov-border);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .table-container th,
 .table-container td {
     padding: 14px 16px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--gov-border);
 }
 
 .table-container th {
     font-weight: bold;
+    background: var(--gov-navy);
+    color: white;
+}
+
+.table-container tbody tr:hover {
+    background: var(--gov-bg);
 }
 
 .user-action-btn {
@@ -750,4 +921,190 @@ font-weight: bold;
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    background: var(--gov-blue);
+    color: white;
+    font-weight: 600;
+}
+
+.user-action-btn:hover {
+    background: var(--gov-blue-dark);
+}
+
+/* =========================================
+   REGISTRATION PAGE
+   ========================================= */
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background:
+        radial-gradient(circle at top left, rgba(20, 90, 158, 0.25), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(169, 124, 47, 0.15), transparent 35%),
+        var(--em-bg);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 460px;
+    padding: 38px;
+    background: var(--em-card);
+    border: 1px solid var(--em-border);
+    border-top: 4px solid var(--gov-gold);
+    border-radius: 12px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    font-family: var(--gov-font-heading);
+    background: linear-gradient(135deg, var(--em-violet), var(--em-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.auth-header p {
+    margin-top: 8px;
+    color: var(--em-dim);
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--em-text);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 14px;
+    border: 1px solid var(--em-border);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--em-text);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.form-group input::placeholder {
+    color: var(--em-dim);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--em-violet);
+    box-shadow: 0 0 0 3px rgba(20, 90, 158, 0.25);
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.form-group select option {
+    background: #101019;
+    color: #f1f0f6;
+}
+
+#registerButton {
+    width: 100%;
+    padding: 14px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(
+        135deg,
+        var(--em-violet),
+        var(--em-cyan)
+    );
+    color: white;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+#registerButton:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(169, 124, 47, 0.3);
+}
+
+#registerButton:active {
+    transform: translateY(0);
+}
+
+#registerButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    transform: none;
+    box-shadow: none;
+}
+
+#registerMessage {
+    min-height: 20px;
+    margin: 5px 0 12px;
+    color: var(--em-dim);
+    font-size: 13px;
+    text-align: center;
+}
+
+.auth-footer {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.auth-footer p {
+    margin: 0;
+    color: var(--em-dim);
+    font-size: 14px;
+}
+
+.auth-footer a {
+    color: var(--em-cyan);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 520px) {
+
+    .auth-container {
+        padding: 25px 15px;
+    }
+
+    .auth-card {
+        padding: 28px 22px;
+    }
+
+    .auth-header h1 {
+        font-size: 28px;
+    }
 }
