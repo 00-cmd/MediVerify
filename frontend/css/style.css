@@ -204,25 +204,38 @@ a {
 
 /* LOGOUT */
 
+/* ============================================================
+   LOGOUT BUTTON
+============================================================ */
+
 .logout-btn {
     margin-top: auto;
-
-    padding: 12px;
+    width: 100%;
+    padding: 12px 14px;
 
     border: none;
     border-radius: 6px;
 
-    cursor: pointer;
-
     background: var(--gov-red);
     color: white;
+
+    font-family: inherit;
+    font-size: 14px;
     font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .logout-btn:hover {
     background: #7d1616;
+    transform: translateY(-1px);
 }
 
+.logout-btn:active {
+    transform: translateY(0);
+}
 
 /* MAIN CONTENT */
 
@@ -796,20 +809,37 @@ color: var(--gov-gold);
     border-left: 3px solid var(--gov-gold);
 }
 
+/* ============================================================
+   LOGOUT BUTTON
+============================================================ */
+
 .logout-btn {
-    margin-top: 30px;
+    margin-top: auto;
     width: 100%;
-    padding: 12px;
+    padding: 12px 14px;
+
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
+    border-radius: 6px;
+
     background: var(--gov-red);
     color: white;
+
+    font-family: inherit;
+    font-size: 14px;
     font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .logout-btn:hover {
     background: #7d1616;
+    transform: translateY(-1px);
+}
+
+.logout-btn:active {
+    transform: translateY(0);
 }
 
 .main-content {
@@ -969,6 +999,7 @@ color: var(--gov-gold);
     font-weight: 700;
     font-family: var(--gov-font-heading);
     background: linear-gradient(135deg, var(--em-violet), var(--em-cyan));
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
