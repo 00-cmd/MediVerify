@@ -21,36 +21,37 @@
         <aside class="sidebar">
 
             <div class="sidebar-logo">
+
                 <h2>MediVerify</h2>
-                 <p class="role">Manufacturer</p>
-                 
-            <nav class="sidebar-nav">
 
-                <a href="dashboard.html">
-                    Dashboard
-                </a>
+                <p class="role">Manufacturer</p>
 
-                <a href="medicines.html">
-                    Medicines
-                </a>
+                <nav class="sidebar-nav">
 
-                <a href="batches.html">
-                    Batches
-                </a>
+                    <a href="dashboard.html">
+                        Dashboard
+                    </a>
 
-                <a href="qr-codes.html" class="active">
-                    QR Codes
-                </a>
+                    <a href="medicines.html">
+                        Medicines
+                    </a>
 
-                <a href="lifecycle.html">
-                    Lifecycle
-                </a>
+                    <a href="batches.html">
+                        Batches
+                    </a>
 
-            </nav>
+                    <a href="qr-codes.html" class="active">
+                        QR Codes
+                    </a>
+
+                    <a href="lifecycle.html">
+                        Lifecycle
+                    </a>
+
+                </nav>
+
             </div>
 
-
-           
         </aside>
 
 
@@ -79,8 +80,6 @@
 
             <section class="content-section">
 
-                
-
                 <div id="qrList">
 
                     <p>
@@ -95,10 +94,89 @@
 
     </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-<script src="js/config.js"></script>
-<script src="js/qr-codes.js"></script>
+    <!-- ==================================================
+         QR VIEW MODAL
+    =================================================== -->
+
+    <div id="qrModal" class="qr-modal">
+
+        <div class="qr-modal-backdrop"></div>
+
+        <div class="qr-modal-content">
+
+            <button
+                type="button"
+                id="closeQrModal"
+                class="qr-modal-close">
+                &times;
+            </button>
+
+            <h2>Outer QR Code</h2>
+
+            <p class="qr-modal-subtitle">
+                Public medicine verification QR
+            </p>
+
+            <div
+                id="modalQrCode"
+                class="modal-qr-code">
+            </div>
+
+            <div class="modal-qr-details">
+
+                <p>
+                    <strong>Serial Number:</strong>
+                    <span id="modalSerialNumber">-</span>
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    <span id="modalStatus">-</span>
+                </p>
+
+            </div>
+
+            <div class="qr-modal-actions">
+
+                <button
+                    type="button"
+                    id="printSingleQr"
+                    class="qr-print-btn">
+                    Print QR
+                </button>
+
+                <button
+                    type="button"
+                    id="closeQrModalBottom"
+                    class="qr-cancel-btn">
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         PRINT AREA
+    =================================================== -->
+
+    <div id="qrPrintArea" class="qr-print-area"></div>
+
+
+    <!-- ==================================================
+         SCRIPTS
+    =================================================== -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script src="js/config.js"></script>
+
+    <script src="js/qr-codes.js"></script>
+
 </body>
 
 </html>
