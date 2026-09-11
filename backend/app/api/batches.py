@@ -1,10 +1,17 @@
 import uuid
+import secrets
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
-from app.db.models import Batch, Medicine, User, SerializedMedicine
+from app.db.models import (
+    Batch,
+    Medicine,
+    User,
+    SerializedMedicine,
+    InnerQRAuthentication
+)
 from app.schemas.batch import BatchCreate, SerializationRequest
 from app.core.security import require_role
 
@@ -285,12 +292,31 @@ def serialize_batch(
 
     for i in range(serialization_data.quantity):
 
+        # ----------------------------------------------------
+        # Generate unique serial number
+        # ----------------------------------------------------
+
         serial_number = (
             f"{batch.batch_number}-"
             f"{existing_count + i + 1:06d}"
         )
 
+        # ----------------------------------------------------
+        # EXISTING OUTER QR TOKEN
+        # DO NOT CHANGE THIS
+        # ----------------------------------------------------
+
         qr_token = str(uuid.uuid4())
+
+        # ----------------------------------------------------
+        # NEW INNER QR AUTHENTICATION TOKEN
+        # ----------------------------------------------------
+
+        authentication_token = secrets.token_urlsafe(32)
+
+        # ----------------------------------------------------
+        # Create serialized medicine
+        # ----------------------------------------------------
 
         serialized_medicine = SerializedMedicine(
             batch_id=batch.id,
@@ -301,6 +327,28 @@ def serialize_batch(
 
         db.add(serialized_medicine)
 
+        # ----------------------------------------------------
+        # Flush so SQLAlchemy assigns the new medicine ID
+        # ----------------------------------------------------
+
+        db.flush()
+
+        # ----------------------------------------------------
+        # Create Inner QR authentication record
+        # ----------------------------------------------------
+
+        inner_qr = InnerQRAuthentication(
+            serialized_medicine_id=serialized_medicine.id,
+            authentication_token=authentication_token,
+            is_used=False
+        )
+
+        db.add(inner_qr)
+
+        # ----------------------------------------------------
+        # Return existing Outer QR information
+        # ----------------------------------------------------
+
         generated_medicines.append({
             "serial_number": serial_number,
             "qr_token": qr_token,
@@ -308,7 +356,7 @@ def serialize_batch(
         })
 
     # --------------------------------------------------------
-    # Save to database
+    # Save everything to database
     # --------------------------------------------------------
 
     try:

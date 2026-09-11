@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.db.database import Base, engine
 from app.db import models
-from app.api import auth, medicines, batches, verify, admin,lifecycle
+from app.api import auth, medicines, batches, verify, admin,lifecycle,inner_qr
 
 
 # ============================================================
@@ -74,6 +74,7 @@ app.include_router(batches.router)
 app.include_router(verify.router)
 app.include_router(admin.router)
 app.include_router(lifecycle.router)
+app.include_router(inner_qr.router)
 
 
 # ============================================================

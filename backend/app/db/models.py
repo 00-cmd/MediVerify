@@ -6,7 +6,9 @@ from sqlalchemy import (
     Date,
     DateTime,
     ForeignKey,
-    Text
+    Text,
+    Float
+    
 )
 
 from sqlalchemy.orm import relationship
@@ -410,4 +412,83 @@ class Recall(Base):
     issued_by_user = relationship(
         "User",
         back_populates="recalls"
+    )
+
+ 
+# ============================================================
+# INNER QR AUTHENTICATION
+# ============================================================
+
+class InnerQRAuthentication(Base):
+
+    __tablename__ = "inner_qr_authentications"
+
+    id = Column(
+        Integer,
+        primary_key=True,
+        index=True
+    )
+
+    serialized_medicine_id = Column(
+        Integer,
+        ForeignKey("serialized_medicines.id"),
+        nullable=False,
+        unique=True
+    )
+
+    authentication_token = Column(
+        String(255),
+        unique=True,
+        nullable=False,
+        index=True
+    )
+
+    is_used = Column(
+        Boolean,
+        default=False,
+        nullable=False
+    )
+
+    # ========================================================
+    # FIRST VERIFICATION DETAILS
+    # ========================================================
+
+    first_verified_at = Column(
+        DateTime,
+        nullable=True
+    )
+
+    # Human-readable location
+    first_verified_location = Column(
+        String(255),
+        nullable=True
+    )
+
+    # How the location was obtained:
+    # GPS = precise browser location
+    # IP = approximate IP-based location
+    first_verified_location_source = Column(
+        String(20),
+        nullable=True
+    )
+
+    # Precise GPS coordinates when available
+    first_verified_latitude = Column(
+        Float,
+        nullable=True
+    )
+
+    first_verified_longitude = Column(
+        Float,
+        nullable=True
+    )
+
+    # Browser/device information
+    first_verified_device = Column(
+        String(255),
+        nullable=True
+    )
+
+    serialized_medicine = relationship(
+        "SerializedMedicine"
     )

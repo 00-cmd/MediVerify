@@ -139,101 +139,284 @@ async function loadQRCodes() {
             // CREATE QR CARDS
             // ------------------------------------------------
 
-            medicines.forEach(
-                function (medicine) {
+            for (const medicine of medicines) {
 
-                    const card =
-                        document.createElement(
-                            "div"
+                // ====================================================
+                // CARD
+                // ====================================================
+
+                const card =
+                    document.createElement("div");
+
+                card.className =
+                    "qr-card";
+
+
+                // ====================================================
+                // QR SECTION
+                // ====================================================
+
+                const qrSection =
+                    document.createElement("div");
+
+                qrSection.style.display =
+                    "flex";
+
+                qrSection.style.flexWrap =
+                    "wrap";
+
+                qrSection.style.gap =
+                    "30px";
+
+                qrSection.style.justifyContent =
+                    "center";
+
+
+                // ====================================================
+                // OUTER QR
+                // EXISTING SYSTEM — DO NOT CHANGE
+                // ====================================================
+
+                const outerSection =
+                    document.createElement("div");
+
+                outerSection.style.textAlign =
+                    "center";
+
+
+                const outerTitle =
+                    document.createElement("h4");
+
+                outerTitle.textContent =
+                    "Outer QR";
+
+                outerSection.appendChild(
+                    outerTitle
+                );
+
+
+                const outerQRContainer =
+                    document.createElement("div");
+
+                outerQRContainer.className =
+                    "qr-image";
+
+
+                // ------------------------------------------------
+                // EXISTING OUTER QR URL
+                // ------------------------------------------------
+
+                const verificationURL =
+                    `${QR_FRONTEND_URL}/verification.html?token=${medicine.qr_token}`;
+
+
+                // ------------------------------------------------
+                // EXISTING OUTER QR GENERATION
+                // ------------------------------------------------
+
+                new QRCode(
+                    outerQRContainer,
+                    {
+                        text: verificationURL,
+                        width: 200,
+                        height: 200
+                    }
+                );
+
+
+                outerSection.appendChild(
+                    outerQRContainer
+                );
+
+
+                // ====================================================
+                // INNER QR
+                // NEW SYSTEM
+                // ====================================================
+
+                const innerSection =
+                    document.createElement("div");
+
+                innerSection.style.textAlign =
+                    "center";
+
+
+                const innerTitle =
+                    document.createElement("h4");
+
+                innerTitle.textContent =
+                    "Inner QR";
+
+                innerSection.appendChild(
+                    innerTitle
+                );
+
+
+                const innerQRContainer =
+                    document.createElement("div");
+
+                innerQRContainer.className =
+                    "qr-image";
+
+
+                // ------------------------------------------------
+                // INNER QR LOADING MESSAGE
+                // ------------------------------------------------
+
+                innerQRContainer.innerHTML =
+                    "<p>Loading...</p>";
+
+
+                innerSection.appendChild(
+                    innerQRContainer
+                );
+
+
+                // ------------------------------------------------
+                // ADD BOTH QR SECTIONS
+                // ------------------------------------------------
+
+                qrSection.appendChild(
+                    outerSection
+                );
+
+                qrSection.appendChild(
+                    innerSection
+                );
+
+
+                card.appendChild(
+                    qrSection
+                );
+
+
+                // ====================================================
+                // SERIAL NUMBER
+                // ====================================================
+
+                const serial =
+                    document.createElement(
+                        "p"
+                    );
+
+                serial.innerHTML =
+                    `<strong>Serial:</strong> ${medicine.serial_number}`;
+
+
+                // ====================================================
+                // STATUS
+                // ====================================================
+
+                const status =
+                    document.createElement(
+                        "p"
+                    );
+
+                status.innerHTML =
+                    `<strong>Status:</strong> ${medicine.status}`;
+
+
+                card.appendChild(
+                    serial
+                );
+
+                card.appendChild(
+                    status
+                );
+
+
+                // ====================================================
+                // ADD CARD TO GRID
+                // ====================================================
+
+                grid.appendChild(
+                    card
+                );
+
+
+                // ====================================================
+                // GET INNER QR TOKEN
+                // ====================================================
+
+                try {
+
+                    const innerResponse =
+                        await fetch(
+                            `${API_URL}/inner-qr/${medicine.id}`,
+                            {
+                                method: "GET",
+
+                                headers: {
+                                    "Authorization":
+                                        `Bearer ${token}`
+                                }
+                            }
                         );
 
-                    card.className =
-                        "qr-card";
+
+                    if (!innerResponse.ok) {
+
+                        throw new Error(
+                            "Failed to get Inner QR token"
+                        );
+                    }
+
+
+                    const innerData =
+                        await innerResponse.json();
 
 
                     // ------------------------------------------------
-                    // QR CONTAINER
+                    // CLEAR LOADING MESSAGE
                     // ------------------------------------------------
 
-                    const qrContainer =
-                        document.createElement("div");
-
-                    qrContainer.className =
-                        "qr-image";
+                    innerQRContainer.innerHTML =
+                        "";
 
 
                     // ------------------------------------------------
-                    // VERIFICATION URL
+                    // INNER VERIFICATION URL
                     // ------------------------------------------------
 
-                    const verificationURL =
-                        `${QR_FRONTEND_URL}/verification.html?token=${medicine.qr_token}`;
+                    const innerVerificationURL =
+                        `${QR_FRONTEND_URL}/inner-verification.html?token=${encodeURIComponent(innerData.authentication_token)}`;
 
 
                     // ------------------------------------------------
-                    // GENERATE QR CODE
+                    // GENERATE ACTUAL INNER QR
                     // ------------------------------------------------
 
                     new QRCode(
-                        qrContainer,
+                        innerQRContainer,
                         {
-                            text: verificationURL,
+                            text:
+                                innerVerificationURL,
+
                             width: 200,
+
                             height: 200
                         }
                     );
 
 
-                    // ------------------------------------------------
-                    // SERIAL NUMBER
-                    // ------------------------------------------------
+                } catch (innerError) {
 
-                    const serial =
-                        document.createElement(
-                            "p"
-                        );
-
-                    serial.innerHTML =
-                        `<strong>Serial:</strong> ${medicine.serial_number}`;
-
-
-                    // ------------------------------------------------
-                    // STATUS
-                    // ------------------------------------------------
-
-                    const status =
-                        document.createElement(
-                            "p"
-                        );
-
-                    status.innerHTML =
-                        `<strong>Status:</strong> ${medicine.status}`;
-
-
-                    // ------------------------------------------------
-                    // ADD TO CARD
-                    // ------------------------------------------------
-
-                    card.appendChild(
-                        qrContainer
-                    );
-
-                    card.appendChild(
-                        serial
-                    );
-
-                    card.appendChild(
-                        status
+                    console.error(
+                        "Inner QR error:",
+                        innerError
                     );
 
 
-                    grid.appendChild(
-                        card
-                    );
-
+                    innerQRContainer.innerHTML =
+                        "<p>Inner QR unavailable</p>";
                 }
-            );
 
+            }
+
+
+            // ----------------------------------------------------
+            // ADD GRID TO PAGE
+            // ----------------------------------------------------
 
             qrList.appendChild(
                 grid
@@ -264,12 +447,6 @@ async function loadQRCodes() {
             "<p>Could not load QR codes.</p>";
     }
 }
-
-
-// ============================================================
-// LOGOUT
-// ============================================================
-
 
 
 // ============================================================

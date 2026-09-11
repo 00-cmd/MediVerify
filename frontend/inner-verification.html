@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>MediVerify - Inner QR Authentication</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            background: #eef1f5;
+
+            color: #1b2430;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+        }
+
+
+        /* =====================================================
+           MAIN CARD
+        ===================================================== */
+
+        .verification-card {
+
+            width: 100%;
+            max-width: 520px;
+
+            background: #ffffff;
+
+            border: 1px solid #d6dce4;
+
+            border-radius: 10px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.08);
+
+            text-align: center;
+        }
+
+
+        /* =====================================================
+           LOGO / TITLE
+        ===================================================== */
+
+        .logo {
+
+            font-size: 28px;
+
+            font-weight: 700;
+
+            color: #0b3d63;
+
+            margin-bottom: 8px;
+        }
+
+
+        .subtitle {
+
+            font-size: 14px;
+
+            color: #5a6472;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* =====================================================
+           STATUS ICON
+        ===================================================== */
+
+        .status-icon {
+
+            width: 70px;
+            height: 70px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 34px;
+
+            background: #eef1f5;
+
+            color: #0b3d63;
+        }
+
+
+        /* =====================================================
+           HEADINGS
+        ===================================================== */
+
+        h1 {
+
+            font-size: 24px;
+
+            color: #0b3d63;
+
+            margin-bottom: 12px;
+        }
+
+
+        .message {
+
+            font-size: 15px;
+
+            line-height: 1.6;
+
+            color: #5a6472;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        .spinner {
+
+            width: 42px;
+            height: 42px;
+
+            margin: 20px auto;
+
+            border: 4px solid #d6dce4;
+
+            border-top-color: #145a9e;
+
+            border-radius: 50%;
+
+            animation: spin 0.9s linear infinite;
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        /* =====================================================
+           INFORMATION BOX
+        ===================================================== */
+
+        .info-box {
+
+            margin-top: 25px;
+
+            padding: 20px;
+
+            border-radius: 8px;
+
+            background: #f7f9fb;
+
+            border: 1px solid #d6dce4;
+
+            text-align: left;
+        }
+
+
+        .info-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 9px 0;
+
+            border-bottom: 1px solid #e1e5ea;
+
+            font-size: 14px;
+        }
+
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+
+        .info-label {
+
+            font-weight: 600;
+
+            color: #0b3d63;
+        }
+
+
+        .info-value {
+
+            color: #1b2430;
+
+            text-align: right;
+
+            word-break: break-word;
+        }
+
+
+        /* =====================================================
+           SUCCESS
+        ===================================================== */
+
+        .success .status-icon {
+
+            background: #e2f3ea;
+
+            color: #146c43;
+        }
+
+
+        .success h1 {
+
+            color: #146c43;
+        }
+
+
+        /* =====================================================
+           WARNING
+        ===================================================== */
+
+        .warning .status-icon {
+
+            background: #fdf1dc;
+
+            color: #92400e;
+        }
+
+
+        .warning h1 {
+
+            color: #92400e;
+        }
+
+
+        /* =====================================================
+           ERROR
+        ===================================================== */
+
+        .error .status-icon {
+
+            background: #fbe4e4;
+
+            color: #9c1c1c;
+        }
+
+
+        .error h1 {
+
+            color: #9c1c1c;
+        }
+
+
+        /* =====================================================
+           LOCATION NOTICE
+        ===================================================== */
+
+        .location-notice {
+
+            margin-top: 20px;
+
+            padding: 12px 15px;
+
+            border-radius: 6px;
+
+            background: #eef5fb;
+
+            border: 1px solid #cbdceb;
+
+            color: #0b3d63;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            margin-top: 25px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #d6dce4;
+
+            font-size: 12px;
+
+            color: #6b7280;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .verification-card {
+
+                padding: 25px 20px;
+            }
+
+            .info-row {
+
+                flex-direction: column;
+
+                gap: 4px;
+            }
+
+            .info-value {
+
+                text-align: left;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div
+        id="verificationCard"
+        class="verification-card"
+    >
+
+        <div class="logo">
+            MediVerify
+        </div>
+
+        <div class="subtitle">
+            Inner QR Authentication
+        </div>
+
+
+        <!-- =================================================
+             LOADING STATE
+        ================================================== -->
+
+        <div id="loadingState">
+
+            <div class="status-icon">
+                🔐
+            </div>
+
+            <h1>
+                Authenticating Medicine
+            </h1>
+
+            <p class="message">
+                Verifying the Inner QR authentication token
+                and recording the first verification details.
+            </p>
+
+            <div class="spinner"></div>
+
+            <div
+                id="locationStatus"
+                class="location-notice"
+            >
+                Checking device location...
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             RESULT STATE
+        ================================================== -->
+
+        <div
+            id="resultState"
+            style="display: none;"
+        >
+
+            <div
+                id="statusIcon"
+                class="status-icon"
+            >
+                ✓
+            </div>
+
+            <h1 id="resultTitle">
+                Authentication Result
+            </h1>
+
+            <p
+                id="resultMessage"
+                class="message"
+            >
+            </p>
+
+
+            <div
+                id="resultInfo"
+                class="info-box"
+            >
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Status
+                    </span>
+
+                    <span
+                        id="resultStatus"
+                        class="info-value"
+                    >
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        First Verified
+                    </span>
+
+                    <span
+                        id="verifiedAt"
+                        class="info-value"
+                    >
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Location
+                    </span>
+
+                    <span
+                        id="verifiedLocation"
+                        class="info-value"
+                    >
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Location Source
+                    </span>
+
+                    <span
+                        id="locationSource"
+                        class="info-value"
+                    >
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Device
+                    </span>
+
+                    <span
+                        id="verifiedDevice"
+                        class="info-value"
+                    >
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer">
+            MediVerify — Medicine Authenticity & Traceability
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // ====================================================
+        // API CONFIGURATION
+        // ====================================================
+
+        const isLocal =
+            window.location.hostname === "127.0.0.1" ||
+            window.location.hostname === "localhost";
+
+
+        const API_URL = isLocal
+            ? "http://127.0.0.1:8000"
+            : "https://medverify-backend-52fu.onrender.com";
+
+
+        // ====================================================
+        // GET TOKEN FROM QR URL
+        // ====================================================
+
+        const urlParams =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const authenticationToken =
+            urlParams.get("token");
+
+
+        // ====================================================
+        // DEVICE INFORMATION
+        // ====================================================
+
+        const deviceInformation =
+            navigator.userAgent;
+
+
+        // ====================================================
+        // ELEMENTS
+        // ====================================================
+
+        const verificationCard =
+            document.getElementById(
+                "verificationCard"
+            );
+
+
+        const loadingState =
+            document.getElementById(
+                "loadingState"
+            );
+
+
+        const resultState =
+            document.getElementById(
+                "resultState"
+            );
+
+
+        const locationStatus =
+            document.getElementById(
+                "locationStatus"
+            );
+
+
+        // ====================================================
+        // FORMAT DATE
+        // ====================================================
+
+        function formatDateTime(
+            timestamp
+        ) {
+
+            if (!timestamp) {
+                return "Not available";
+            }
+
+
+            const date =
+                new Date(timestamp + "Z");
+
+
+            return date.toLocaleString(
+                "en-IN",
+                {
+                    dateStyle: "medium",
+                    timeStyle: "medium"
+                }
+            );
+
+        }
+
+
+        // ====================================================
+        // DISPLAY RESULT
+        // ====================================================
+
+        function displayResult(
+            data
+        ) {
+
+            loadingState.style.display =
+                "none";
+
+
+            resultState.style.display =
+                "block";
+
+
+            const status =
+                data.status;
+
+
+            const resultTitle =
+                document.getElementById(
+                    "resultTitle"
+                );
+
+
+            const resultMessage =
+                document.getElementById(
+                    "resultMessage"
+                );
+
+
+            const statusIcon =
+                document.getElementById(
+                    "statusIcon"
+                );
+
+
+            const resultStatus =
+                document.getElementById(
+                    "resultStatus"
+                );
+
+
+            const verifiedAt =
+                document.getElementById(
+                    "verifiedAt"
+                );
+
+
+            const verifiedLocation =
+                document.getElementById(
+                    "verifiedLocation"
+                );
+
+
+            const locationSource =
+                document.getElementById(
+                    "locationSource"
+                );
+
+
+            const verifiedDevice =
+                document.getElementById(
+                    "verifiedDevice"
+                );
+
+
+            if (
+                status ===
+                "AUTHENTICATED"
+            ) {
+
+                verificationCard.className =
+                    "verification-card success";
+
+
+                statusIcon.textContent =
+                    "✓";
+
+
+                resultTitle.textContent =
+                    "Medicine Authenticated";
+
+
+                resultMessage.textContent =
+                    "The Inner QR was authenticated successfully for the first time.";
+
+
+            } else if (
+                status ===
+                "ALREADY_AUTHENTICATED"
+            ) {
+
+                verificationCard.className =
+                    "verification-card warning";
+
+
+                statusIcon.textContent =
+                    "⚠";
+
+
+                resultTitle.textContent =
+                    "Already Authenticated";
+
+
+                resultMessage.textContent =
+                    "This Inner QR has already been authenticated. The details below show the first recorded authentication.";
+
+
+            } else {
+
+                verificationCard.className =
+                    "verification-card error";
+
+
+                statusIcon.textContent =
+                    "!";
+
+
+                resultTitle.textContent =
+                    "Authentication Failed";
+
+
+                resultMessage.textContent =
+                    data.message ||
+                    "The Inner QR could not be authenticated.";
+
+            }
+
+
+            resultStatus.textContent =
+                status || "UNKNOWN";
+
+
+            verifiedAt.textContent =
+                formatDateTime(
+                    data.first_verified_at
+                );
+
+
+            verifiedLocation.textContent =
+                data.first_verified_location ||
+                "Unavailable";
+
+
+            locationSource.textContent =
+                data.first_verified_location_source ||
+                "Unavailable";
+
+
+            verifiedDevice.textContent =
+                data.first_verified_device ||
+                "Unavailable";
+
+        }
+
+
+        // ====================================================
+        // DISPLAY ERROR
+        // ====================================================
+
+        function displayError(
+            message
+        ) {
+
+            loadingState.style.display =
+                "none";
+
+
+            resultState.style.display =
+                "block";
+
+
+            verificationCard.className =
+                "verification-card error";
+
+
+            document.getElementById(
+                "statusIcon"
+            ).textContent = "!";
+
+
+            document.getElementById(
+                "resultTitle"
+            ).textContent =
+                "Verification Failed";
+
+
+            document.getElementById(
+                "resultMessage"
+            ).textContent =
+                message;
+
+
+            document.getElementById(
+                "resultStatus"
+            ).textContent =
+                "FAILED";
+
+
+            document.getElementById(
+                "verifiedAt"
+            ).textContent =
+                "Not available";
+
+
+            document.getElementById(
+                "verifiedLocation"
+            ).textContent =
+                "Not available";
+
+
+            document.getElementById(
+                "locationSource"
+            ).textContent =
+                "Not available";
+
+
+            document.getElementById(
+                "verifiedDevice"
+            ).textContent =
+                "Not available";
+
+        }
+
+
+        // ====================================================
+        // SEND VERIFICATION REQUEST
+        // ====================================================
+
+        async function verifyInnerQR(
+            latitude = null,
+            longitude = null,
+            locationPermission = false
+        ) {
+
+            if (!authenticationToken) {
+
+                displayError(
+                    "No Inner QR authentication token was found in this URL."
+                );
+
+                return;
+
+            }
+
+
+            const params =
+                new URLSearchParams();
+
+
+            params.append(
+                "authentication_token",
+                authenticationToken
+            );
+
+
+            params.append(
+                "location_permission",
+                locationPermission
+            );
+
+
+            params.append(
+                "device",
+                deviceInformation
+            );
+
+
+            if (
+                latitude !== null &&
+                longitude !== null
+            ) {
+
+                params.append(
+                    "latitude",
+                    latitude
+                );
+
+
+                params.append(
+                    "longitude",
+                    longitude
+                );
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/inner-qr/verify?${params.toString()}`,
+                        {
+                            method: "POST"
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.detail ||
+                        "Inner QR verification failed."
+                    );
+
+                }
+
+
+                displayResult(
+                    data
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Inner QR verification error:",
+                    error
+                );
+
+
+                displayError(
+                    error.message ||
+                    "Unable to connect to the MediVerify server."
+                );
+
+            }
+
+        }
+
+
+        // ====================================================
+        // GET GPS LOCATION
+        // ====================================================
+
+        function requestGPSLocation() {
+
+            if (
+                !navigator.geolocation
+            ) {
+
+                locationStatus.textContent =
+                    "GPS is not available. Using approximate IP-based location.";
+
+
+                verifyInnerQR(
+                    null,
+                    null,
+                    false
+                );
+
+
+                return;
+
+            }
+
+
+            locationStatus.textContent =
+                "Requesting precise device location...";
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                function(position) {
+
+                    const latitude =
+                        position.coords.latitude;
+
+
+                    const longitude =
+                        position.coords.longitude;
+
+
+                    locationStatus.textContent =
+                        "Precise GPS location obtained.";
+
+
+                    verifyInnerQR(
+                        latitude,
+                        longitude,
+                        true
+                    );
+
+                },
+
+
+                function(error) {
+
+                    console.log(
+                        "GPS unavailable:",
+                        error.message
+                    );
+
+
+                    locationStatus.textContent =
+                        "Precise location unavailable. Using approximate IP-based location.";
+
+
+                    verifyInnerQR(
+                        null,
+                        null,
+                        false
+                    );
+
+                },
+
+
+                {
+                    enableHighAccuracy: true,
+
+                    timeout: 10000,
+
+                    maximumAge: 0
+                }
+
+            );
+
+        }
+
+
+        // ====================================================
+        // START VERIFICATION
+        // ====================================================
+
+        requestGPSLocation();
+
+    </script>
+
+</body>
+
+</html>
