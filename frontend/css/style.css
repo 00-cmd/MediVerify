@@ -1194,35 +1194,57 @@ a {
 }
 
 /* ============================================================
-   LIFECYCLE MEDICINE DROPDOWN
+   LIFECYCLE DROPDOWNS
 ============================================================ */
 
-#medicineSelect {
+#medicineSelect,
+#eventType {
     width: 100%;
     max-width: 600px;
 
     padding: 12px 14px;
 
-    border: 1px solid var(--gov-border);
+    border: 1px solid #b8c2cc;
     border-radius: 6px;
 
-    background: var(--gov-surface);
-    color: var(--gov-text);
+    background-color: #ffffff;
+    color: #1b2430;
 
     font-family: var(--gov-font-body);
     font-size: 15px;
+    font-weight: 500;
 
     cursor: pointer;
-
     outline: none;
+
+    /* Make the closed select clearly visible */
+    box-shadow: 0 1px 3px rgba(11, 61, 99, 0.08);
 }
 
-#medicineSelect:focus {
+#medicineSelect:hover,
+#eventType:hover {
     border-color: var(--gov-blue);
-    box-shadow: 0 0 0 3px rgba(20, 90, 158, 0.15);
 }
 
-#medicineSelect option {
-    background: var(--gov-surface);
-    color: var(--gov-text);
+#medicineSelect:focus,
+#eventType:focus {
+    border-color: var(--gov-blue);
+
+    box-shadow:
+        0 0 0 3px rgba(20, 90, 158, 0.15);
+}
+
+/* Dropdown items */
+
+#medicineSelect option,
+#eventType option {
+    background-color: #ffffff !important;
+    color: #1b2430 !important;
+}
+
+/* Placeholder */
+
+#medicineSelect option[value=""] {
+    color: #5a6472;
+    
 }
