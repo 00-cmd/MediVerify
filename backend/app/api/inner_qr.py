@@ -18,10 +18,6 @@ from app.db.models import (
 from app.core.security import require_role
 
 
-# ============================================================
-# ROUTER
-# ============================================================
-
 router = APIRouter(
     prefix="/inner-qr",
     tags=["Inner QR Authentication"]
@@ -29,14 +25,80 @@ router = APIRouter(
 
 
 # ============================================================
-# IP GEOLOCATION
+# GPS REVERSE GEOCODING
+# ============================================================
+
+def reverse_geocode(latitude: float, longitude: float):
+    """
+    Convert GPS coordinates into a human-readable location
+    using OpenStreetMap Nominatim.
+    """
+
+    try:
+
+        url = (
+            "https://nominatim.openstreetmap.org/reverse"
+            f"?lat={latitude}"
+            f"&lon={longitude}"
+            "&format=json"
+            "&zoom=10"
+            "&addressdetails=1"
+        )
+
+        request = URLRequest(
+            url,
+            headers={
+                "User-Agent": "MediVerify/1.0"
+            }
+        )
+
+        with urlopen(request, timeout=5) as response:
+
+            data = json.loads(
+                response.read().decode("utf-8")
+            )
+
+        address = data.get("address", {})
+
+        city = (
+            address.get("city")
+            or address.get("town")
+            or address.get("village")
+            or address.get("municipality")
+        )
+
+        state = address.get("state")
+
+        country = address.get("country")
+
+        location_parts = [
+            value
+            for value in [city, state, country]
+            if value
+        ]
+
+        if not location_parts:
+            return None
+
+        return ", ".join(location_parts)
+
+    except Exception:
+
+        return None
+
+
+# ============================================================
+# IP LOCATION FALLBACK
 # ============================================================
 
 def get_ip_location(ip_address: str):
 
     try:
 
-        encoded_ip = quote(ip_address, safe="")
+        encoded_ip = quote(
+            ip_address,
+            safe=""
+        )
 
         url = (
             f"https://ipapi.co/"
@@ -60,12 +122,14 @@ def get_ip_location(ip_address: str):
             )
 
         if data.get("error"):
+
             return None
 
         latitude = data.get("latitude")
         longitude = data.get("longitude")
 
         if latitude is None or longitude is None:
+
             return None
 
         city = data.get("city")
@@ -82,10 +146,15 @@ def get_ip_location(ip_address: str):
             if value
         ]
 
-        location = ", ".join(location_parts)
+        location = ", ".join(
+            location_parts
+        )
 
         return {
-            "location": location or "Approximate location unavailable",
+            "location": (
+                location
+                or "Approximate location unavailable"
+            ),
             "latitude": float(latitude),
             "longitude": float(longitude)
         }
@@ -97,34 +166,23 @@ def get_ip_location(ip_address: str):
 
 # ============================================================
 # GET INNER QR TOKEN
-# MANUFACTURER ONLY
 # ============================================================
 
 @router.get("/{serialized_medicine_id}")
 def get_inner_qr_token(
     serialized_medicine_id: int,
-    db: Session = Depends(get_db),
     current_user: User = Depends(
         require_role("MANUFACTURER")
-    )
+    ),
+    db: Session = Depends(get_db)
 ):
 
-    serialized_medicine = (
-        db.query(SerializedMedicine)
-        .join(
-            Batch,
-            SerializedMedicine.batch_id == Batch.id
-        )
-        .join(
-            Medicine,
-            Batch.medicine_id == Medicine.id
-        )
-        .filter(
-            SerializedMedicine.id == serialized_medicine_id,
-            Medicine.manufacturer_id == current_user.id
-        )
-        .first()
-    )
+    serialized_medicine = db.query(
+        SerializedMedicine
+    ).filter(
+        SerializedMedicine.id ==
+        serialized_medicine_id
+    ).first()
 
     if not serialized_medicine:
 
@@ -133,11 +191,42 @@ def get_inner_qr_token(
             detail="Serialized medicine not found"
         )
 
+    batch = db.query(Batch).filter(
+        Batch.id ==
+        serialized_medicine.batch_id
+    ).first()
+
+    if not batch:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Batch not found"
+        )
+
+    medicine = db.query(Medicine).filter(
+        Medicine.id ==
+        batch.medicine_id
+    ).first()
+
+    if not medicine:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Medicine not found"
+        )
+
+    if medicine.manufacturer_id != current_user.id:
+
+        raise HTTPException(
+            status_code=403,
+            detail="You do not own this medicine"
+        )
+
     inner_qr = db.query(
         InnerQRAuthentication
     ).filter(
-        InnerQRAuthentication.serialized_medicine_id
-        == serialized_medicine.id
+        InnerQRAuthentication.serialized_medicine_id ==
+        serialized_medicine_id
     ).first()
 
     if not inner_qr:
@@ -148,38 +237,50 @@ def get_inner_qr_token(
         )
 
     return {
-        "serialized_medicine_id": serialized_medicine.id,
-        "serial_number": serialized_medicine.serial_number,
-        "authentication_token": inner_qr.authentication_token,
-        "is_used": inner_qr.is_used
+        "serialized_medicine_id":
+            serialized_medicine.id,
+
+        "serial_number":
+            serialized_medicine.serial_number,
+
+        "authentication_token":
+            inner_qr.authentication_token,
+
+        "is_used":
+            inner_qr.is_used
     }
 
 
 # ============================================================
 # VERIFY INNER QR
-# PUBLIC ENDPOINT
 # ============================================================
 
 @router.post("/verify")
 def verify_inner_qr(
     request: Request,
+
     authentication_token: str,
+
     latitude: float | None = None,
+
     longitude: float | None = None,
+
     location_permission: bool = False,
+
     device: str | None = None,
+
     db: Session = Depends(get_db)
 ):
 
-    # --------------------------------------------------------
-    # Find Inner QR record
-    # --------------------------------------------------------
+    # ========================================================
+    # FIND TOKEN
+    # ========================================================
 
     inner_qr = db.query(
         InnerQRAuthentication
     ).filter(
-        InnerQRAuthentication.authentication_token
-        == authentication_token
+        InnerQRAuthentication.authentication_token ==
+        authentication_token
     ).first()
 
     if not inner_qr:
@@ -189,18 +290,20 @@ def verify_inner_qr(
             detail="Invalid Inner QR authentication token"
         )
 
-    # --------------------------------------------------------
-    # Determine location
-    # --------------------------------------------------------
 
-    location = None
+    # ========================================================
+    # LOCATION VARIABLES
+    # ========================================================
+
+    verified_location = None
     location_source = None
-    final_latitude = None
-    final_longitude = None
+    verified_latitude = None
+    verified_longitude = None
 
-    # --------------------------------------------------------
-    # OPTION 1: BROWSER GPS
-    # --------------------------------------------------------
+
+    # ========================================================
+    # GPS LOCATION
+    # ========================================================
 
     if (
         location_permission
@@ -208,30 +311,40 @@ def verify_inner_qr(
         and longitude is not None
     ):
 
-        final_latitude = latitude
-        final_longitude = longitude
+        verified_latitude = latitude
+        verified_longitude = longitude
 
-        location = (
-            f"{latitude:.6f}, "
-            f"{longitude:.6f}"
+        # Reverse GPS coordinates into location name
+        verified_location = reverse_geocode(
+            latitude,
+            longitude
         )
 
-        location_source = "GPS"
+        if verified_location:
 
-    # --------------------------------------------------------
-    # OPTION 2: IP GEOLOCATION FALLBACK
-    # --------------------------------------------------------
+            location_source = "GPS"
 
-    else:
+        else:
+
+            # Keep coordinates if reverse geocoding fails
+            verified_location = (
+                f"{latitude:.6f}, "
+                f"{longitude:.6f}"
+            )
+
+            location_source = "GPS"
+
+
+    # ========================================================
+    # IP LOCATION FALLBACK
+    # ========================================================
+
+    if verified_location is None:
 
         client_ip = None
 
-        # ----------------------------------------------------
-        # Try proxy-provided client IP first
-        # ----------------------------------------------------
-
         forwarded_for = request.headers.get(
-            "x-forwarded-for"
+            "X-Forwarded-For"
         )
 
         if forwarded_for:
@@ -242,31 +355,20 @@ def verify_inner_qr(
                 .strip()
             )
 
-        # ----------------------------------------------------
-        # Fall back to direct client IP
-        # ----------------------------------------------------
-
-        if not client_ip and request.client:
+        elif request.client:
 
             client_ip = request.client.host
 
-        # ----------------------------------------------------
-        # Ignore localhost/private development addresses
-        # because they cannot provide useful public
-        # geolocation.
-        # ----------------------------------------------------
 
-        if client_ip in {
+        # Don't attempt IP lookup for localhost
+        if client_ip in [
             "127.0.0.1",
             "::1",
             "localhost"
-        }:
+        ]:
 
             client_ip = None
 
-        # ----------------------------------------------------
-        # Perform actual IP geolocation
-        # ----------------------------------------------------
 
         if client_ip:
 
@@ -276,54 +378,72 @@ def verify_inner_qr(
 
             if ip_location:
 
-                location = ip_location["location"]
+                verified_location = (
+                    ip_location["location"]
+                )
 
-                final_latitude = (
+                verified_latitude = (
                     ip_location["latitude"]
                 )
 
-                final_longitude = (
+                verified_longitude = (
                     ip_location["longitude"]
                 )
 
                 location_source = "IP"
 
-    # --------------------------------------------------------
-    # FIRST AUTHENTICATION
-    # --------------------------------------------------------
 
-    verification_time = (
-        datetime.now(timezone.utc)
-        .replace(tzinfo=None)
+    # ========================================================
+    # CURRENT UTC TIME
+    # ========================================================
+
+    verified_at = datetime.now(
+        timezone.utc
+    ).replace(
+        tzinfo=None
     )
 
-    update_statement = (
+
+    # ========================================================
+    # ATOMIC ONE-TIME AUTHENTICATION
+    # ========================================================
+
+    result = db.execute(
         update(InnerQRAuthentication)
         .where(
-            InnerQRAuthentication.id
-            == inner_qr.id,
+            InnerQRAuthentication.id ==
+            inner_qr.id,
 
-            InnerQRAuthentication.is_used
-            == False
+            InnerQRAuthentication.is_used ==
+            False
         )
         .values(
             is_used=True,
-            first_verified_at=verification_time,
-            first_verified_location=location,
-            first_verified_location_source=location_source,
-            first_verified_latitude=final_latitude,
-            first_verified_longitude=final_longitude,
-            first_verified_device=device
+
+            first_verified_at=
+                verified_at,
+
+            first_verified_location=
+                verified_location,
+
+            first_verified_location_source=
+                location_source,
+
+            first_verified_latitude=
+                verified_latitude,
+
+            first_verified_longitude=
+                verified_longitude,
+
+            first_verified_device=
+                device
         )
     )
 
-    result = db.execute(
-        update_statement
-    )
 
-    # --------------------------------------------------------
-    # FIRST SCAN SUCCESS
-    # --------------------------------------------------------
+    # ========================================================
+    # FIRST SUCCESSFUL SCAN
+    # ========================================================
 
     if result.rowcount == 1:
 
@@ -331,46 +451,65 @@ def verify_inner_qr(
 
         return {
             "status": "AUTHENTICATED",
-            "message": "Inner QR authenticated successfully",
+
+            "message":
+                "Inner QR authenticated successfully",
+
             "is_used": True,
-            "first_verified_at": verification_time,
-            "first_verified_location": location,
-            "first_verified_location_source": location_source,
-            "first_verified_latitude": final_latitude,
-            "first_verified_longitude": final_longitude,
-            "first_verified_device": device
+
+            "first_verified_at":
+                verified_at,
+
+            "first_verified_location":
+                verified_location,
+
+            "first_verified_location_source":
+                location_source,
+
+            "first_verified_latitude":
+                verified_latitude,
+
+            "first_verified_longitude":
+                verified_longitude,
+
+            "first_verified_device":
+                device
         }
 
-    # --------------------------------------------------------
-    # ALREADY USED
-    # --------------------------------------------------------
+
+    # ========================================================
+    # ALREADY AUTHENTICATED
+    # ========================================================
 
     db.rollback()
 
-    existing_record = db.query(
-        InnerQRAuthentication
-    ).filter(
-        InnerQRAuthentication.id == inner_qr.id
-    ).first()
+    db.refresh(inner_qr)
 
     return {
-        "status": "ALREADY_AUTHENTICATED",
-        "message": "This Inner QR has already been authenticated",
-        "is_used": True,
-        "first_verified_at": existing_record.first_verified_at,
-        "first_verified_location": (
-            existing_record.first_verified_location
-        ),
-        "first_verified_location_source": (
-            existing_record.first_verified_location_source
-        ),
-        "first_verified_latitude": (
-            existing_record.first_verified_latitude
-        ),
-        "first_verified_longitude": (
-            existing_record.first_verified_longitude
-        ),
-        "first_verified_device": (
-            existing_record.first_verified_device
-        )
+        "status":
+            "ALREADY_AUTHENTICATED",
+
+        "message":
+            "This Inner QR has already been authenticated",
+
+        "is_used":
+            True,
+
+        "first_verified_at":
+            inner_qr.first_verified_at,
+
+        "first_verified_location":
+            inner_qr.first_verified_location,
+
+        "first_verified_location_source":
+            inner_qr.first_verified_location_source,
+
+        "first_verified_latitude":
+            inner_qr.first_verified_latitude,
+
+        "first_verified_longitude":
+            inner_qr.first_verified_longitude,
+
+        "first_verified_device":
+            inner_qr.first_verified_device
     }
